@@ -2,254 +2,420 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Portfolio of David King, a frontend designer, fullstack developer, and app developer building polished digital products across web and mobile.">
-    <title>David King | Frontend Designer & Fullstack Developer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>David King — Full-Stack Developer</title>
+  <meta name="description"
+    content="David King is a full-stack developer building fast, accessible web apps, scalable backends, and polished product experiences for startups and growing teams.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="David King — Full-Stack Developer">
+  <meta property="og:description"
+    content="Full-stack developer portfolio featuring web apps, APIs, dashboards, and production-grade digital products.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,400;1,700;1,900&family=Instrument+Serif:ital@1&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <div class="page-glow page-glow-left"></div>
-    <div class="page-glow page-glow-right"></div>
+  <!-- Custom Cursor -->
+  <div id="cursor" class="cursor"></div>
+  <div id="cursor-follower" class="cursor-follower">
+    <span class="cursor-text"></span>
+  </div>
 
-    <nav class="navbar">
-        <div class="container nav-wrapper">
-            <a href="#home" class="brand">
-                <span class="brand-mark">DK</span>
-                <span class="brand-text">David King</span>
-            </a>
+  <!-- Navigation -->
+  <header id="navbar" class="navbar">
+    <div class="nav-available">
+      <span class="available-dot"></span>
+      Available for work
+    </div>
+    <nav class="nav-inner container">
+      <a href="/" class="nav-logo" id="nav-logo-link">David King</a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
 
-            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navMenu"
-                aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-            </button>
-
-            <div class="nav-panel" id="navMenu">
-                <ul class="nav-menu">
-                    <li><a href="#about" class="nav-link">About</a></li>
-                    <li><a href="#capabilities" class="nav-link">Capabilities</a></li>
-                    <li><a href="#projects" class="nav-link">Projects</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
-                </ul>
-            </div>
-        </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
     </nav>
+  </header>
 
-    <main>
-        <section id="home" class="hero">
-            <div class="decorative-elements">
-                <div class="floating-snippet snippet-1">const solve = (problem) => { ... }</div>
-                <div class="floating-snippet snippet-2">GET /api/v1/solutions</div>
-                <div class="floating-snippet snippet-3">{ status: "optimized" }</div>
-                <div class="floating-snippet snippet-4">import { Logic } from 'core';</div>
-            </div>
-            <div class="hero-grid">
-                <div class="hero-copy reveal">
-                    <p class="eyebrow">Frontend designer | Fullstack developer | Problem Solver</p>
-                    <h1 class="hero-title">I design and build digital products that feel sharp, useful, and ready for
-                        real users.</h1>
-                    <p class="hero-description">
-                        I help turn product ideas into clean interfaces, scalable web experiences, and mobile app flows
-                        that look intentional from the first screen to the final interaction.
-                    </p>
-                    <div class="hero-actions">
-                        <a href="#projects" class="btn btn-primary">See Selected Work</a>
-                        <a href="#contact" class="btn btn-secondary">Start a Project</a>
-                    </div>
-                    <div class="hero-proof">
-                        <div>
-                            <span class="proof-label">Focus</span>
-                            <strong>Design-led frontend</strong>
-                        </div>
-                        <div>
-                            <span class="proof-label">Build</span>
-                            <strong>Web, APIs, automation</strong>
-                        </div>
-                        <div>
-                            <span class="proof-label">Platform</span>
-                            <strong>Responsive + mobile-first</strong>
-                        </div>
-                    </div>
-                </div>
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-inner">
+      <ul class="mobile-nav-links">
+        <li><a href="#projects" class="mobile-nav-link">Projects</a></li>
+        <li><a href="#about" class="mobile-nav-link">About</a></li>
+        <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
+      </ul>
 
-            </div>
-            </div>
-        </section>
+    </div>
+  </div>
 
-        <section id="about" class="about section-shell">
-            <div class="container">
-                <div class="section-heading reveal">
-                    <p class="eyebrow">About</p>
-                    <h2 class="section-title">A developer with a designer's eye and a builder's mindset.</h2>
-                </div>
-
-                <div class="about-grid">
-                    <div class="about-values">
-                        <article class="value-card reveal">
-                            <span class="value-index">01</span>
-                            <h3>Deliberate Design</h3>
-                            <p>Interfaces that feel intentional and earn attention.</p>
-                        </article>
-                        <article class="value-card reveal">
-                            <span class="value-index">02</span>
-                            <h3>Scalable Code</h3>
-                            <p>Logic built to grow and stay maintainable.</p>
-                        </article>
-                        <article class="value-card reveal">
-                            <span class="value-index">03</span>
-                            <h3>User-Centric</h3>
-                            <p>Products shaped around clarity and ease of use.</p>
-                        </article>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="capabilities" class="capabilities section-shell">
-            <div class="container">
-                <div class="section-heading reveal">
-                    <p class="eyebrow">Capabilities</p>
-                    <h2 class="section-title">Three strengths working together.</h2>
-                </div>
-
-                <div class="capability-grid">
-                    <article class="capability-card reveal">
-                        <p class="card-kicker">Design</p>
-                        <h3>UI & Interaction</h3>
-                        <p>Fluid, responsive interfaces with a premium feel.</p>
-                        <div class="tag-row">
-                            <span>Figma</span>
-                            <span>Responsive</span>
-                        </div>
-                    </article>
-
-                    <article class="capability-card reveal">
-                        <p class="card-kicker">Web</p>
-                        <h3>Fullstack Dev</h3>
-                        <p>Connecting polished UI to reliable working logic.</p>
-                        <div class="tag-row">
-                            <span>Node.js</span>
-                            <span>MongoDB</span>
-                        </div>
-                    </article>
-
-                    <article class="capability-card reveal">
-                        <p class="card-kicker">Apps</p>
-                        <h3>Mobile Flows</h3>
-                        <p>Modern app screens shaped for clarity and speed.</p>
-                        <div class="tag-row">
-                            <span>Kotlin</span>
-                            <span>Compose</span>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects" class="projects section-shell">
-            <div class="container">
-                <div class="section-heading reveal">
-                    <p class="eyebrow">Selected work</p>
-                    <h2 class="section-title">Projects that show range across product, code, and execution.</h2>
-                </div>
-
-                <div class="projects-grid">
-                    <article class="project-card reveal">
-                        <div class="project-image-wrapper">
-                            <img src="img/recipe searcher.png" alt="Recipe Finder interface preview"
-                                class="project-image" loading="lazy">
-                        </div>
-                        <div class="project-content">
-                            <p class="card-kicker">Web</p>
-                            <h3>Recipe Finder</h3>
-                            <p>A searchable experience designed for quick content discovery.</p>
-                            <a href="https://courageous-churros-f4e0e7.netlify.app/" class="project-link"
-                                target="_blank" rel="noopener noreferrer">View live project</a>
-                        </div>
-                    </article>
-
-                    <article class="project-card reveal">
-                        <div class="project-image-wrapper">
-                            <img src="img/Account audit.png" alt="Account auditing workflow preview"
-                                class="project-image" loading="lazy">
-                        </div>
-                        <div class="project-content">
-                            <p class="card-kicker">Backend</p>
-                            <h3>Account Auditor</h3>
-                            <p>Automation script for security rule-based account checks.</p>
-                            <a href="https://github.com/RED222-code" class="project-link" target="_blank"
-                                rel="noopener noreferrer">View GitHub</a>
-                        </div>
-                    </article>
-
-                    <article class="project-card reveal">
-                        <div class="project-image-wrapper">
-                            <img src="img/Banking app.png" alt="Banking app UI concept preview" class="project-image"
-                                loading="lazy">
-                        </div>
-                        <div class="project-content">
-                            <p class="card-kicker">Mobile</p>
-                            <h3>Banking UI</h3>
-                            <p>A concept exploring modern financial information hierarchy.</p>
-                            <a href="https://github.com/RED222-code" class="project-link" target="_blank"
-                                rel="noopener noreferrer">Explore work</a>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-
-        <section id="contact" class="contact section-shell">
-            <div class="container contact-shell reveal">
-                <div class="contact-copy">
-                    <p class="eyebrow">Contact</p>
-                    <h2 class="section-title">Let's build something sharp.</h2>
-                    <p class="contact-intro">
-                        Open to freelance and collaborative projects focused on design-led development.
-                    </p>
-                </div>
-
-                <div class="contact-grid">
-                    <a class="contact-card" href="mailto:davidking18222@gmail.com">
-                        <i class="fa-regular fa-envelope"></i>
-                        <span>Email</span>
-                        <strong>davidking18222@gmail.com</strong>
-                    </a>
-                    <a class="contact-card" href="https://github.com/RED222-code" target="_blank"
-                        rel="noopener noreferrer">
-                        <i class="fa-brands fa-github"></i>
-                        <span>GitHub</span>
-                        <strong>RED222-code</strong>
-                    </a>
-                    <a class="contact-card" href="https://www.linkedin.com/in/davidking/" target="_blank"
-                        rel="noopener noreferrer">
-                        <i class="fa-brands fa-linkedin"></i>
-                        <span>LinkedIn</span>
-                        <strong>David King</strong>
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="container footer-shell">
-            <p>David King</p>
-            <p>Just a preview of what to expect, get in touch for more.</p>
+  <main>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+      <div class="hero-bg">
+        <img src="images/hero.jpg" alt="Hero background" class="hero-bg-img" id="hero-parallax">
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content container">
+        <div class="hero-badge reveal-item" id="hero-badge">
+          <span class="badge-text">Full-Stack Developer</span>
         </div>
-    </footer>
+        <h1 class="hero-title">
+          <span class="word-reveal">I build</span>
+          <span class="word-reveal italic-serif">scalable,</span>
+          <span class="word-reveal">modern</span>
+          <span class="word-reveal">web</span>
+          <span class="word-reveal">applications</span>
+        </h1>
+        <p class="hero-sub reveal-item">A full-stack developer turning product ideas into reliable interfaces, APIs,
+          databases, and cloud-ready systems.</p>
+      </div>
+      <div class="hero-scroll-indicator">
+        <div class="scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+    </section>
 
-    <script src="backend.js"></script>
+
+    <!-- Process Section -->
+    <section class="process section-pad" id="process">
+      <div class="container">
+        <div class="section-label reveal-item">Build Process</div>
+        <div class="process-layout">
+          <div class="process-image reveal-item reveal-left">
+            <img src="images/Projects/Le-santos/dark.png" alt="Le Santos Diner dark interface preview" class="process-img">
+            <div class="process-img-badge">
+              <span>Est. 2019</span>
+            </div>
+          </div>
+          <div class="process-steps">
+            <div class="process-header reveal-item">
+              <h2>How I <em class="italic-serif">ship products</em><br>from idea to launch</h2>
+            </div>
+            <div class="process-step reveal-item" data-step="01">
+              <div class="step-number">01</div>
+              <div class="step-content">
+                <h3>Plan</h3>
+                <p>I map the product goals, user flows, data models, integrations, and technical risks before writing
+                  production code.</p>
+              </div>
+            </div>
+            <div class="process-step reveal-item" data-step="02">
+              <div class="step-number">02</div>
+              <div class="step-content">
+                <h3>Build</h3>
+                <p>I develop responsive frontends, secure APIs, database schemas, and the glue that makes the full
+                  product feel fast and dependable.</p>
+              </div>
+            </div>
+            <div class="process-step reveal-item" data-step="03">
+              <div class="step-number">03</div>
+              <div class="step-content">
+                <h3>Launch</h3>
+                <p>I deploy, test, document, and monitor the application so your team can keep improving with
+                  confidence after release.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Projects Section -->
+    <section class="projects section-pad" id="projects">
+      <div class="container">
+        <div class="projects-header reveal-item">
+          <div class="section-label">Selected Work</div>
+          <h2>Products I have <em class="italic-serif">built</em></h2>
+          <a href="projects.html" class="view-all-link">View All →</a>
+        </div>
+        <div class="projects-slideshow-container reveal-item">
+          <div class="projects-slideshow-track">
+            <a class="project-card project-slide active" href="https://le-santos-dinner.vercel.app/" target="_blank"
+              rel="noopener" data-cursor-text="View">
+              <div class="project-card-img">
+                <img src="images/Projects/Le-santos/light.png" alt="Le Santos Diner light website preview">
+                <div class="project-overlay">
+                  <span class="overlay-text">View Project</span>
+                </div>
+              </div>
+              <div class="project-card-info">
+                <span class="project-tag">Web Development</span>
+                <h3 class="project-title">le-santos-diner</h3>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about section-pad" id="about">
+      <div class="container">
+        <div class="about-layout">
+          <div class="about-left reveal-item reveal-left">
+            <div class="section-label">About Me</div>
+            <h2>A developer obsessed with <em class="italic-serif">useful software</em></h2>
+            <p class="about-body">I build across the stack, from polished user interfaces to APIs, databases,
+              authentication, deployment, and performance tuning.</p>
+            <p class="about-body">Since 2023, I have helped founders and teams turn messy product ideas into clean,
+              maintainable applications that are ready for real users.</p>
+            <div class="about-stats">
+              <div class="stat-item">
+                <span class="stat-number">7+</span>
+                <span class="stat-label">Apps Delivered</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">3yrs</span>
+                <span class="stat-label">Building Products</span>
+              </div>
+            </div>
+            <a href="#contact" class="btn btn-primary magnetic-btn">Work With Me</a>
+          </div>
+          <div class="about-right reveal-item reveal-right">
+            <div class="about-img-stack">
+              <img src="images/Projects/Le-santos/light.png" alt="Le Santos Diner responsive website interface" class="about-img-main">
+              <div class="about-img-badge">
+                <span>Frontend + Backend</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- Why Us Section -->
+    <section class="why-us section-pad" id="why-us">
+      <div class="why-us-marquee-band">
+        <div class="why-marquee-inner">
+          <span>Frontend</span><span class="mx">·</span>
+          <span>Backend</span><span class="mx">·</span>
+          <span>Databases</span><span class="mx">·</span>
+          <span>Cloud Deployment</span><span class="mx">·</span>
+          <span>Frontend</span><span class="mx">·</span>
+          <span>Backend</span><span class="mx">·</span>
+          <span>Databases</span><span class="mx">·</span>
+          <span>Cloud Deployment</span><span class="mx">·</span>
+        </div>
+      </div>
+      <div class="container">
+        <div class="why-us-header reveal-item">
+          <div class="section-label">Why Work With Me</div>
+          <h2>What sets my <em class="italic-serif">work</em> apart</h2>
+        </div>
+        <div class="skills-scroll">
+          <div class="skills-track">
+            <span class="skill-badge">React</span>
+            <span class="skill-badge">Node.js</span>
+            <span class="skill-badge">APIs</span>
+            <span class="skill-badge">Databases</span>
+            <span class="skill-badge">Cloud</span>
+          </div>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card reveal-item">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+            </div>
+            <h3>Product-Minded Engineering</h3>
+            <p>I care about the whole experience: clear flows, useful features, readable code, and systems that can
+              grow without becoming fragile.</p>
+          </div>
+          <div class="feature-card reveal-item">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <h3>Reliable Delivery</h3>
+            <p>Structured milestones, frequent demos, and practical technical choices keep projects moving from scope to
+              shipped product.</p>
+          </div>
+          <div class="feature-card reveal-item">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <h3>Direct Collaboration</h3>
+            <p>You work directly with me. No account managers, middle-men, or agency handoffs. Personal collaboration
+              with the person actually building your product.</p>
+          </div>
+          <div class="feature-card reveal-item">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
+            <h3>Performance-Focused</h3>
+            <p>Fast loading, accessible interfaces, secure defaults, and clean data flows are built in from the start,
+              not patched on later.</p>
+          </div>
+          <div class="feature-card reveal-item">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
+            </div>
+            <h3>Post-Launch Support</h3>
+            <p>I can help with analytics, bug fixes, feature iterations, and technical improvements once the first
+              version is live.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- Comparison Table -->
+    <section class="comparison section-pad" id="comparison">
+      <div class="container">
+        <div class="comparison-header reveal-item">
+          <div class="section-label">Comparison</div>
+          <h2>Senior solo dev vs <em class="italic-serif">the alternatives</em></h2>
+        </div>
+        <div class="comparison-table reveal-item">
+          <div class="comparison-col comparison-col--fade">
+            <div class="col-header">
+              <span class="col-label col-label--fade">David King</span>
+            </div>
+            <div class="comparison-row"><span class="check">✓</span> Practical product-building experience</div>
+            <div class="comparison-row"><span class="check">✓</span> You talk directly to the builder</div>
+            <div class="comparison-row"><span class="check">✓</span> Clean, production-grade code</div>
+            <div class="comparison-row"><span class="check">✓</span> No agency bloat</div>
+            <div class="comparison-row"><span class="check">✓</span> Predictable timelines</div>
+            <div class="comparison-row"><span class="check">✓</span> Outcome-focused, not hour-focused</div>
+          </div>
+          <div class="comparison-col comparison-col--others">
+            <div class="col-header">
+              <span class="col-label col-label--others">Agencies &amp; Junior Devs</span>
+            </div>
+            <div class="comparison-row"><span class="cross">✗</span> Junior devs doing senior work</div>
+            <div class="comparison-row"><span class="cross">✗</span> Account managers in the way</div>
+            <div class="comparison-row"><span class="cross">✗</span> Copy-paste, framework-heavy code</div>
+            <div class="comparison-row"><span class="cross">✗</span> Inflated retainers &amp; overhead</div>
+            <div class="comparison-row"><span class="cross">✗</span> Scope creep &amp; missed deadlines</div>
+            <div class="comparison-row"><span class="cross">✗</span> Billing hours, not solving problems</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq section-pad" id="faq">
+      <div class="container">
+        <div class="faq-center">
+          <div class="faq-left reveal-item">
+            <div class="section-label">FAQ</div>
+            <h2 class="reveal-item" style="text-align:center">Common <em class="italic-serif">questions</em></h2>
+          </div>
+          <div class="faq-right">
+            <div class="faq-item reveal-item active" id="faq-1">
+              <button class="faq-question" aria-expanded="true">
+                How long does a typical web app take?
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                <p>Focused landing pages or small apps can take 2–4 weeks. Larger dashboards, portals, and API-backed
+                  products often take 6–12 weeks depending on scope and integrations.</p>
+              </div>
+            </div>
+            <div class="faq-item reveal-item" id="faq-2">
+              <button class="faq-question" aria-expanded="false">
+                Do you work with early-stage startups?
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                <p>Absolutely. I work well with early teams that need an MVP, technical direction, or a production-ready
+                  first version without hiring a full engineering team.</p>
+              </div>
+            </div>
+            <div class="faq-item reveal-item" id="faq-3">
+              <button class="faq-question" aria-expanded="false">
+                What does the process look like?
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                <p>I follow a 3-stage process: Plan the product and architecture, build the frontend and backend, then
+                  launch with testing, deployment, and documentation.</p>
+              </div>
+            </div>
+
+            <div class="faq-item reveal-item" id="faq-5">
+              <button class="faq-question" aria-expanded="false">
+                Can you maintain the app after launch?
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                <p>Yes. I offer ongoing support for fixes, monitoring, performance improvements, new features, and
+                  technical cleanup as the product grows.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Footer CTA -->
+    <section class="footer-cta section-pad" id="contact">
+      <div class="container">
+        <div class="footer-cta-inner reveal-item">
+          <p class="footer-cta-tag"><em class="italic-serif">Let's build something</em></p>
+          <h2 class="footer-cta-headline">Ready to build<br>your app?</h2>
+          <p class="footer-cta-sub">Tell me what you are building. I will respond within 24 hours.</p>
+          <button type="button" class="btn btn-white magnetic-btn footer-cta-btn start-project-trigger">Start a Project
+            →</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <a href="/" class="footer-logo">David King</a>
+        <p class="footer-tagline">Clean code. Useful products. Reliable launches.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <div class="footer-nav-col">
+          <h4>Pages</h4>
+          <a href="#">Projects</a>
+          <a href="#">About</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-bottom container">
+      <span>© 2026 David King. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
 </body>
 
 </html>

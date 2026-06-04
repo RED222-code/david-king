@@ -8,10 +8,12 @@ A professional portfolio showcasing frontend design, fullstack development, and 
 - **Architecture**: Single-page application (SPA) with IntersectionObserver for animations and navigation.
 
 ## 📂 Project Structure
-- `index.html`: The core structure and content.
-- `style.css`: Modern CSS with custom properties (variables) and responsive design.
-- `backend.js`: Client-side logic for navigation, smooth scrolling, and scroll-reveal effects.
-- `img/`: Optimized project assets and thumbnails.
+- `html/index.html`: The homepage structure and content.
+- `html/about.html`: The about/profile page.
+- `html/projects.html`: The project listing page.
+- `css/style.css`: Modern CSS with custom properties (variables) and responsive design.
+- `js/main.js`: Client-side logic for navigation, smooth scrolling, modals, and scroll-reveal effects.
+- `images/`: Project assets and thumbnails.
 
 ## 🛠️ Key Features
 - **Responsive Design**: Fully fluid layouts across mobile, tablet, and desktop.

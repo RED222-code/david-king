@@ -4,23 +4,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>David King — Full-Stack Developer</title>
+  <title>David King — Full-Stack Developer | React &amp; Node.js</title>
   <meta name="description"
-    content="David King is a full-stack developer building fast, accessible web apps, scalable backends, and polished product experiences for startups and growing teams.">
+    content="David King is a full-stack developer who builds React, Node.js and Firebase products that don't just function — they leave a lasting impression.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="David King — Full-Stack Developer">
+  <meta property="og:title" content="David King — Full-Stack Developer | React &amp; Node.js">
   <meta property="og:description"
-    content="Full-stack developer portfolio featuring web apps, APIs, dashboards, and production-grade digital products.">
+    content="Full-stack developer building React, Node.js and Firebase products with a focus on design, user experience, and creating software that stands out.">
   <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:url" content="https://YOUR-DOMAIN.com/">
+  <meta property="og:image" content="https://YOUR-DOMAIN.com/images/og-image.png">
+  <meta name="twitter:image" content="https://YOUR-DOMAIN.com/images/og-image.png">
+  <link rel="canonical" href="https://YOUR-DOMAIN.com/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "David King",
+    "jobTitle": "Full-Stack Developer",
+    "url": "https://YOUR-DOMAIN.com",
+    "email": "davidking18222@gmail.com",
+    "knowsAbout": ["React", "Node.js", "JavaScript", "MongoDB", "Firebase", "Express"]
+  }
+  </script>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,400;1,700;1,900&family=Instrument+Serif:ital@1&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
+  <!-- Skip Navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <!-- Custom Cursor -->
   <div id="cursor" class="cursor"></div>
   <div id="cursor-follower" class="cursor-follower">
@@ -34,11 +52,12 @@
       Available for work
     </div>
     <nav class="nav-inner container">
-      <a href="/" class="nav-logo" id="nav-logo-link">David King</a>
+      <a href="index.html" class="nav-logo" id="nav-logo-link">David King</a>
       <ul class="nav-links" id="nav-links">
+        <li><a href="#home" class="nav-link">Home</a></li>
         <li><a href="#projects" class="nav-link">Projects</a></li>
-        <li><a href="#about" class="nav-link">About</a></li>
-        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="#contact" class="btn btn-accent nav-accent-cta start-project-trigger">Hire Me</a></li>
       </ul>
 
       <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -48,44 +67,70 @@
   </header>
 
   <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
     <div class="mobile-menu-inner">
       <ul class="mobile-nav-links">
+        <li><a href="#home" class="mobile-nav-link">Home</a></li>
         <li><a href="#projects" class="mobile-nav-link">Projects</a></li>
-        <li><a href="#about" class="mobile-nav-link">About</a></li>
-        <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
+        <li><a href="about.html" class="mobile-nav-link">About</a></li>
       </ul>
-
     </div>
   </div>
 
-  <main>
+  <main id="main-content">
     <!-- Hero Section -->
-    <section class="hero" id="hero">
-      <div class="hero-bg">
-        <img src="images/hero.jpg" alt="Hero background" class="hero-bg-img" id="hero-parallax">
-        <div class="hero-overlay"></div>
-      </div>
-      <div class="hero-content container">
-        <div class="hero-badge reveal-item" id="hero-badge">
-          <span class="badge-text">Full-Stack Developer</span>
+    <section class="hero" id="home">
+      <div class="hero-container container">
+        <div class="hero-left">
+          <p class="hero-greeting reveal-item">Hi I am</p>
+          <h1 class="hero-name reveal-item">David King</h1>
+          <p class="hero-role reveal-item">Full-Stack Developer</p>
+          <div class="hero-social-links reveal-item">
+            <a href="https://github.com/davidking" target="_blank" rel="noopener" class="hero-social-btn" aria-label="GitHub">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+              </svg>
+            </a>
+            <a href="https://linkedin.com/in/davidking" target="_blank" rel="noopener" class="hero-social-btn" aria-label="LinkedIn">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+              </svg>
+            </a>
+            <a href="mailto:davidking18222@gmail.com" class="hero-social-btn" aria-label="Email">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </a>
+          </div>
+          <div class="hero-cta-row reveal-item">
+            <a href="#contact" class="btn btn-accent start-project-trigger">Hire Me</a>
+            <a href="#projects" class="btn btn-outline-light">View Work</a>
+          </div>
+          <div class="hero-stats-bar reveal-item">
+            <div class="hero-stat">
+              <span class="stat-num">7+</span>
+              <span>Apps Built</span>
+            </div>
+            <div class="hero-stat">
+              <span class="stat-num">5yrs</span>
+              <span>Experience</span>
+            </div>
+            <div class="hero-stat">
+              <span class="stat-num">100%</span>
+              <span>Client Satisfaction</span>
+            </div>
+          </div>
         </div>
-        <h1 class="hero-title">
-          <span class="word-reveal">I build</span>
-          <span class="word-reveal italic-serif">scalable,</span>
-          <span class="word-reveal">modern</span>
-          <span class="word-reveal">web</span>
-          <span class="word-reveal">applications</span>
-        </h1>
-        <p class="hero-sub reveal-item">A full-stack developer turning product ideas into reliable interfaces, APIs,
-          databases, and cloud-ready systems.</p>
-      </div>
-      <div class="hero-scroll-indicator">
-        <div class="scroll-line"></div>
-        <span>Scroll</span>
+        <div class="hero-right reveal-item">
+          <div class="hero-portrait-wrap">
+            <div class="hero-portrait-img-box">
+              <img src="../images/portrait.png" alt="David King, full-stack developer" class="hero-portrait-img" width="380" height="475" fetchpriority="high">
+            </div>
+          </div>
+        </div>
       </div>
     </section>
-
 
     <!-- Process Section -->
     <section class="process section-pad" id="process">
@@ -93,9 +138,9 @@
         <div class="section-label reveal-item">Build Process</div>
         <div class="process-layout">
           <div class="process-image reveal-item reveal-left">
-            <img src="images/Projects/Le-santos/dark.png" alt="Le Santos Diner dark interface preview" class="process-img">
+            <img src="../images/build-process.png" alt="Developer workstation setup" class="process-img" loading="lazy" width="600" height="560">
             <div class="process-img-badge">
-              <span>Est. 2019</span>
+              <span>Since 2023</span>
             </div>
           </div>
           <div class="process-steps">
@@ -131,21 +176,20 @@
       </div>
     </section>
 
-
     <!-- Projects Section -->
     <section class="projects section-pad" id="projects">
       <div class="container">
         <div class="projects-header reveal-item">
           <div class="section-label">Selected Work</div>
           <h2>Products I have <em class="italic-serif">built</em></h2>
-          <a href="projects.html" class="view-all-link">View All →</a>
+          <a href="projects.html" class="view-all-link">View All</a>
         </div>
         <div class="projects-slideshow-container reveal-item">
           <div class="projects-slideshow-track">
             <a class="project-card project-slide active" href="https://le-santos-dinner.vercel.app/" target="_blank"
               rel="noopener" data-cursor-text="View">
               <div class="project-card-img">
-                <img src="images/Projects/Le-santos/light.png" alt="Le Santos Diner light website preview">
+                <img src="../images/Projects/Le-santos/light.png" alt="Le Santos Diner light website preview" loading="lazy">
                 <div class="project-overlay">
                   <span class="overlay-text">View Project</span>
                 </div>
@@ -159,56 +203,31 @@
         </div>
       </div>
     </section>
-
-    <!-- About Section -->
-    <section class="about section-pad" id="about">
-      <div class="container">
-        <div class="about-layout">
-          <div class="about-left reveal-item reveal-left">
-            <div class="section-label">About Me</div>
-            <h2>A developer obsessed with <em class="italic-serif">useful software</em></h2>
-            <p class="about-body">I build across the stack, from polished user interfaces to APIs, databases,
-              authentication, deployment, and performance tuning.</p>
-            <p class="about-body">Since 2023, I have helped founders and teams turn messy product ideas into clean,
-              maintainable applications that are ready for real users.</p>
-            <div class="about-stats">
-              <div class="stat-item">
-                <span class="stat-number">7+</span>
-                <span class="stat-label">Apps Delivered</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number">3yrs</span>
-                <span class="stat-label">Building Products</span>
-              </div>
-            </div>
-            <a href="#contact" class="btn btn-primary magnetic-btn">Work With Me</a>
-          </div>
-          <div class="about-right reveal-item reveal-right">
-            <div class="about-img-stack">
-              <img src="images/Projects/Le-santos/light.png" alt="Le Santos Diner responsive website interface" class="about-img-main">
-              <div class="about-img-badge">
-                <span>Frontend + Backend</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-
+  
     <!-- Why Us Section -->
     <section class="why-us section-pad" id="why-us">
-      <div class="why-us-marquee-band">
+      <div class="why-us-marquee-band" aria-hidden="true">
         <div class="why-marquee-inner">
-          <span>Frontend</span><span class="mx">·</span>
-          <span>Backend</span><span class="mx">·</span>
-          <span>Databases</span><span class="mx">·</span>
-          <span>Cloud Deployment</span><span class="mx">·</span>
-          <span>Frontend</span><span class="mx">·</span>
-          <span>Backend</span><span class="mx">·</span>
-          <span>Databases</span><span class="mx">·</span>
-          <span>Cloud Deployment</span><span class="mx">·</span>
+          <div class="why-marquee-group">
+            <span>Frontend</span><span class="mx">&middot;</span>
+            <span>Backend</span><span class="mx">&middot;</span>
+            <span>Databases</span><span class="mx">&middot;</span>
+            <span>Cloud Deployment</span><span class="mx">&middot;</span>
+            <span>Frontend</span><span class="mx">&middot;</span>
+            <span>Backend</span><span class="mx">&middot;</span>
+            <span>Databases</span><span class="mx">&middot;</span>
+            <span>Cloud Deployment</span><span class="mx">&middot;</span>
+          </div>
+          <div class="why-marquee-group" aria-hidden="true">
+            <span>Frontend</span><span class="mx">&middot;</span>
+            <span>Backend</span><span class="mx">&middot;</span>
+            <span>Databases</span><span class="mx">&middot;</span>
+            <span>Cloud Deployment</span><span class="mx">&middot;</span>
+            <span>Frontend</span><span class="mx">&middot;</span>
+            <span>Backend</span><span class="mx">&middot;</span>
+            <span>Databases</span><span class="mx">&middot;</span>
+            <span>Cloud Deployment</span><span class="mx">&middot;</span>
+          </div>
         </div>
       </div>
       <div class="container">
@@ -228,9 +247,8 @@
         <div class="features-grid">
           <div class="feature-card reveal-item">
             <div class="feature-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path
-                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
             </div>
             <h3>Product-Minded Engineering</h3>
@@ -239,7 +257,7 @@
           </div>
           <div class="feature-card reveal-item">
             <div class="feature-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
               </svg>
@@ -250,7 +268,7 @@
           </div>
           <div class="feature-card reveal-item">
             <div class="feature-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
@@ -261,7 +279,7 @@
           </div>
           <div class="feature-card reveal-item">
             <div class="feature-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
               </svg>
             </div>
@@ -271,7 +289,7 @@
           </div>
           <div class="feature-card reveal-item">
             <div class="feature-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <line x1="18" y1="20" x2="18" y2="10" />
                 <line x1="12" y1="20" x2="12" y2="4" />
                 <line x1="6" y1="20" x2="6" y2="14" />
@@ -280,42 +298,6 @@
             <h3>Post-Launch Support</h3>
             <p>I can help with analytics, bug fixes, feature iterations, and technical improvements once the first
               version is live.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-
-    <!-- Comparison Table -->
-    <section class="comparison section-pad" id="comparison">
-      <div class="container">
-        <div class="comparison-header reveal-item">
-          <div class="section-label">Comparison</div>
-          <h2>Senior solo dev vs <em class="italic-serif">the alternatives</em></h2>
-        </div>
-        <div class="comparison-table reveal-item">
-          <div class="comparison-col comparison-col--fade">
-            <div class="col-header">
-              <span class="col-label col-label--fade">David King</span>
-            </div>
-            <div class="comparison-row"><span class="check">✓</span> Practical product-building experience</div>
-            <div class="comparison-row"><span class="check">✓</span> You talk directly to the builder</div>
-            <div class="comparison-row"><span class="check">✓</span> Clean, production-grade code</div>
-            <div class="comparison-row"><span class="check">✓</span> No agency bloat</div>
-            <div class="comparison-row"><span class="check">✓</span> Predictable timelines</div>
-            <div class="comparison-row"><span class="check">✓</span> Outcome-focused, not hour-focused</div>
-          </div>
-          <div class="comparison-col comparison-col--others">
-            <div class="col-header">
-              <span class="col-label col-label--others">Agencies &amp; Junior Devs</span>
-            </div>
-            <div class="comparison-row"><span class="cross">✗</span> Junior devs doing senior work</div>
-            <div class="comparison-row"><span class="cross">✗</span> Account managers in the way</div>
-            <div class="comparison-row"><span class="cross">✗</span> Copy-paste, framework-heavy code</div>
-            <div class="comparison-row"><span class="cross">✗</span> Inflated retainers &amp; overhead</div>
-            <div class="comparison-row"><span class="cross">✗</span> Scope creep &amp; missed deadlines</div>
-            <div class="comparison-row"><span class="cross">✗</span> Billing hours, not solving problems</div>
           </div>
         </div>
       </div>
@@ -331,42 +313,41 @@
           </div>
           <div class="faq-right">
             <div class="faq-item reveal-item active" id="faq-1">
-              <button class="faq-question" aria-expanded="true">
+              <button class="faq-question" aria-expanded="true" aria-controls="faq-answer-1">
                 How long does a typical web app take?
-                <span class="faq-icon">+</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
               </button>
-              <div class="faq-answer">
-                <p>Focused landing pages or small apps can take 2–4 weeks. Larger dashboards, portals, and API-backed
-                  products often take 6–12 weeks depending on scope and integrations.</p>
+              <div class="faq-answer" id="faq-answer-1">
+                <p>Focused landing pages or small apps can take 2-4 weeks. Larger dashboards, portals, and API-backed
+                  products often take 6-12 weeks depending on scope and integrations.</p>
               </div>
             </div>
             <div class="faq-item reveal-item" id="faq-2">
-              <button class="faq-question" aria-expanded="false">
+              <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
                 Do you work with early-stage startups?
-                <span class="faq-icon">+</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
               </button>
-              <div class="faq-answer">
+              <div class="faq-answer" id="faq-answer-2">
                 <p>Absolutely. I work well with early teams that need an MVP, technical direction, or a production-ready
                   first version without hiring a full engineering team.</p>
               </div>
             </div>
             <div class="faq-item reveal-item" id="faq-3">
-              <button class="faq-question" aria-expanded="false">
+              <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
                 What does the process look like?
-                <span class="faq-icon">+</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
               </button>
-              <div class="faq-answer">
+              <div class="faq-answer" id="faq-answer-3">
                 <p>I follow a 3-stage process: Plan the product and architecture, build the frontend and backend, then
                   launch with testing, deployment, and documentation.</p>
               </div>
             </div>
-
-            <div class="faq-item reveal-item" id="faq-5">
-              <button class="faq-question" aria-expanded="false">
+            <div class="faq-item reveal-item" id="faq-4">
+              <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
                 Can you maintain the app after launch?
-                <span class="faq-icon">+</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
               </button>
-              <div class="faq-answer">
+              <div class="faq-answer" id="faq-answer-4">
                 <p>Yes. I offer ongoing support for fixes, monitoring, performance improvements, new features, and
                   technical cleanup as the product grows.</p>
               </div>
@@ -376,7 +357,6 @@
       </div>
     </section>
 
-
     <!-- Footer CTA -->
     <section class="footer-cta section-pad" id="contact">
       <div class="container">
@@ -385,37 +365,14 @@
           <h2 class="footer-cta-headline">Ready to build<br>your app?</h2>
           <p class="footer-cta-sub">Tell me what you are building. I will respond within 24 hours.</p>
           <button type="button" class="btn btn-white magnetic-btn footer-cta-btn start-project-trigger">Start a Project
-            →</button>
+            &rarr;</button>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-left">
-        <a href="/" class="footer-logo">David King</a>
-        <p class="footer-tagline">Clean code. Useful products. Reliable launches.</p>
-      </div>
-      <nav class="footer-nav" aria-label="Footer navigation">
-        <div class="footer-nav-col">
-          <h4>Pages</h4>
-          <a href="#">Projects</a>
-          <a href="#">About</a>
-        </div>
-      </nav>
-    </div>
-    <div class="footer-bottom container">
-      <span>© 2026 David King. All rights reserved.</span>
-      <div class="footer-bottom-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-      </div>
-    </div>
-  </footer>
 
-  <script src="js/main.js"></script>
+  <script src="../js/main.js"></script>
 </body>
 
 </html>

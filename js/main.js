@@ -14,6 +14,7 @@ let followerX = 0, followerY = 0;
 
 if (cursor && cursorFollower) {
   document.addEventListener('mousemove', (e) => {
+    document.body.classList.add('cursor-ready');
     mouseX = e.clientX;
     mouseY = e.clientY;
     cursor.style.left = mouseX + 'px';
@@ -99,10 +100,45 @@ updateNavbar();
 const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobile-menu');
 
+// ─── Focus Trap (mobile menu) ─────────────────────────────────────────────────
+let _focusTrapHandler = null;
+
+function trapFocus(el) {
+  const focusable = Array.from(
+    el.querySelectorAll('a[href], button, [tabindex]:not([tabindex="-1"])')
+  ).filter(n => !n.disabled);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last  = focusable[focusable.length - 1];
+  _focusTrapHandler = (e) => {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+    }
+  };
+  el.addEventListener('keydown', _focusTrapHandler);
+  first.focus();
+}
+
+function releaseFocusTrap(el) {
+  if (_focusTrapHandler) {
+    el.removeEventListener('keydown', _focusTrapHandler);
+    _focusTrapHandler = null;
+  }
+  hamburger?.focus();
+}
+
 function toggleMenu() {
   const isOpen = mobileMenu.classList.toggle('open');
   hamburger.classList.toggle('open', isOpen);
   document.body.classList.toggle('menu-open', isOpen);
+  if (isOpen) {
+    trapFocus(mobileMenu);
+  } else {
+    releaseFocusTrap(mobileMenu);
+  }
 }
 
 hamburger?.addEventListener('click', toggleMenu);
@@ -112,6 +148,7 @@ document.querySelectorAll('.mobile-nav-link, .mobile-cta').forEach(el => {
     mobileMenu.classList.remove('open');
     hamburger.classList.remove('open');
     document.body.classList.remove('menu-open');
+    releaseFocusTrap(mobileMenu);
   });
 });
 
@@ -130,7 +167,7 @@ function initHeroReveal() {
   });
 
   // Other hero reveal items
-  const revealItems = document.querySelectorAll('.hero-content .reveal-item');
+  const revealItems = document.querySelectorAll('.hero .reveal-item');
   revealItems.forEach((item, i) => {
     setTimeout(() => {
       item.classList.add('visible');
@@ -191,9 +228,10 @@ function initParallax() {
 // ─── Services Carousel ────────────────────────────────────────────────────────
 function initServicesCarousel() {
   const carousel = document.getElementById('services-carousel');
+  if (!carousel) return; // carousel not present on this page
+
   const prevBtn = document.getElementById('services-prev');
   const nextBtn = document.getElementById('services-next');
-  if (!carousel) return;
 
   let isDragging = false;
   let startX = 0;
@@ -277,6 +315,8 @@ function initFAQ() {
 // ─── Pricing Toggle ───────────────────────────────────────────────────────────
 function initPricingToggle() {
   const monthlyBtn = document.getElementById('toggle-monthly');
+  if (!monthlyBtn) return; // pricing UI not present on this page
+
   const projectBtn = document.getElementById('toggle-project');
   const studioPrice = document.getElementById('price-studio');
   const agencyPrice = document.getElementById('price-agency');
@@ -344,7 +384,7 @@ function initProjectInquiryForm() {
   if (!triggers.length) return;
 
   const contactEmail = 'davidking18222@gmail.com';
-  const whatsappNumber = '2347081004161';
+  const whatsappNumber = '2348159243744';
 
   const modal = document.createElement('div');
   modal.className = 'project-modal';
@@ -364,10 +404,7 @@ function initProjectInquiryForm() {
           <label for="project-email">Email</label>
           <input id="project-email" name="email" type="email" autocomplete="email" required>
         </div>
-        <div class="project-form-row">
-          <label for="project-phone">WhatsApp / phone</label>
-          <input id="project-phone" name="phone" type="tel" autocomplete="tel">
-        </div>
+       
         <div class="project-form-row">
           <label for="project-type">Project type</label>
           <select id="project-type" name="type" required>
@@ -505,14 +542,11 @@ function animateCounter(el, target, suffix) {
 }
 
 function initCounters() {
-  const counters = [
-    { selector: '.about-stats .stat-item:nth-child(1) .stat-number', target: 7, suffix: '+' },
-    { selector: '.about-stats .stat-item:nth-child(2) .stat-number', target: 3, suffix: 'yr' },
-  ];
-
-  counters.forEach(({ selector, target, suffix }) => {
-    const el = document.querySelector(selector);
-    if (!el) return;
+  // Use data-counter attribute on any numeric stat element
+  document.querySelectorAll('[data-counter]').forEach(el => {
+    const target = parseInt(el.dataset.counter, 10);
+    const suffix = el.dataset.counterSuffix || '';
+    if (isNaN(target)) return;
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
@@ -614,6 +648,7 @@ function initProjectsSlideshow() {
   }
 
   function startAutoPlay() {
+    if (slides.length <= 1) return; // No-op with a single slide
     stopAutoPlay();
     timer = setInterval(nextSlide, 2500); // 2.5s auto play
   }
@@ -665,8 +700,37 @@ function initA11y() {
   });
 }
 
+// ─── Project Filter ───────────────────────────────────────────────────────────
+function initProjectFilter() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const projectCards = document.querySelectorAll('#projects-grid .project-card');
+  if (!filterBtns.length) return;
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      projectCards.forEach(card => {
+        const category = card.dataset.category;
+        if (filter === 'all' || category === filter) {
+          card.removeAttribute('data-hidden');
+          card.style.display = '';
+        } else {
+          card.setAttribute('data-hidden', 'true');
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+}
+
 // ─── Init All ─────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // Mark JS as active — enables CSS-first hero reveal & other JS-gated styles
+  document.body.classList.add('js-ready');
   initPageLoad();
   initHeroReveal();
   initScrollReveal();
@@ -680,13 +744,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initActiveNavLink();
   initImageFallbacks();
   initProjectsSlideshow();
+  initProjectFilter();
   initA11y();
 
   // Add keyboard nav styles
   const style = document.createElement('style');
   style.textContent = `
     body.keyboard-nav *:focus {
-      outline: 2px solid #000 !important;
+      outline: 2px solid var(--color-accent) !important;
       outline-offset: 3px;
     }
   `;

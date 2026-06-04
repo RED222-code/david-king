@@ -1,0 +1,13 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/",            "destination": "/html/index.html" },
+    { "source": "/about",       "destination": "/html/about.html" },
+    { "source": "/projects",    "destination": "/html/projects.html" }
+  ],
+  "redirects": [
+    { "source": "/index.html",    "destination": "/",        "permanent": true },
+    { "source": "/about.html",    "destination": "/about",   "permanent": true },
+    { "source": "/projects.html", "destination": "/projects","permanent": true }
+  ]
+}

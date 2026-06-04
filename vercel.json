@@ -1,13 +1,14 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/",            "destination": "/html/index.html" },
-    { "source": "/about",       "destination": "/html/about.html" },
-    { "source": "/projects",    "destination": "/html/projects.html" }
+    { "source": "/",         "destination": "/html/index" },
+    { "source": "/about",    "destination": "/html/about" },
+    { "source": "/projects", "destination": "/html/projects" }
   ],
   "redirects": [
-    { "source": "/index.html",    "destination": "/",        "permanent": true },
-    { "source": "/about.html",    "destination": "/about",   "permanent": true },
-    { "source": "/projects.html", "destination": "/projects","permanent": true }
+    { "source": "/html/index",    "destination": "/",         "permanent": true },
+    { "source": "/html/about",    "destination": "/about",    "permanent": true },
+    { "source": "/html/projects", "destination": "/projects", "permanent": true }
   ]
 }

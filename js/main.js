@@ -172,16 +172,15 @@ function initProjectInquiryForm() {
       <form class="project-form" id="project-inquiry-form">
         <div class="project-form-row">
           <label for="project-name">Name</label>
-          <input id="project-name" name="name" type="text" autocomplete="name" required>
+          <input id="project-name" name="name" type="text" autocomplete="name" placeholder="Your name" required>
         </div>
         <div class="project-form-row">
           <label for="project-email">Email</label>
-          <input id="project-email" name="email" type="email" autocomplete="email" required>
+          <input id="project-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
         </div>
         <div class="project-form-row">
-          <label for="project-type">Project type</label>
-          <select id="project-type" name="type" required>
-            <option value="">Select one</option>
+          <select id="project-type" name="type" aria-label="Project type" required>
+            <option value="" selected disabled hidden>Project type</option>
             <option>Web app</option>
             <option>Website</option>
             <option>Ecommerce</option>
@@ -190,9 +189,8 @@ function initProjectInquiryForm() {
           </select>
         </div>
         <div class="project-form-row">
-          <label for="project-budget">Budget range</label>
-          <select id="project-budget" name="budget" required>
-            <option value="">Select one</option>
+          <select id="project-budget" name="budget" aria-label="Budget range" required>
+            <option value="" selected disabled hidden>Budget range</option>
             <option>Under $1,000</option>
             <option>$1,000 - $3,000</option>
             <option>$3,000 - $8,000</option>
@@ -201,7 +199,7 @@ function initProjectInquiryForm() {
         </div>
         <div class="project-form-row">
           <label for="project-message">Project details</label>
-          <textarea id="project-message" name="message" rows="5" required></textarea>
+          <textarea id="project-message" name="message" rows="5" placeholder="Tell me what you're building, your timeline, and any must-have features." required></textarea>
         </div>
         <p class="project-form-note">Submitting sends the inquiry by email and opens WhatsApp with the details ready to send.</p>
         <p class="project-form-status" role="status" aria-live="polite"></p>

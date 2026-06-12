@@ -2313,10 +2313,29 @@ a.nav-link.btn {
   border-radius: var(--radius-md);
   background: var(--color-bg);
   color: var(--color-fg);
+  color-scheme: dark;
   font: inherit;
   font-size: 15px;
   padding: 13px 14px;
   outline: none;
+}
+.project-form-row input::placeholder,
+.project-form-row textarea::placeholder {
+  color: var(--color-fg-muted);
+  opacity: 0.82;
+}
+.project-form-row select {
+  background-color: var(--color-surface);
+}
+.project-form-row select:required:invalid {
+  color: var(--color-fg-muted);
+}
+.project-form-row select option {
+  background: var(--color-surface);
+  color: var(--color-fg);
+}
+.project-form-row select option:disabled {
+  color: var(--color-fg-muted);
 }
 .project-form-row textarea {
   min-height: 132px;
@@ -4381,12 +4400,13 @@ body.project-modal-open {
   }
 
   .project-modal {
-    padding: 12px;
+    align-items: flex-start;
+    padding: max(12px, env(safe-area-inset-top, 0px)) 12px max(12px, env(safe-area-inset-bottom, 0px));
   }
 
   .project-modal-panel {
     width: 100%;
-    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
     padding: var(--sp-lg);
     border-radius: 20px;
   }
@@ -4413,6 +4433,52 @@ body.project-modal-open {
 
   .project-form-submit {
     width: 100%;
+  }
+
+  .project-form-row textarea {
+    min-height: 112px;
+  }
+
+  @media (max-width: 480px) {
+    .project-modal {
+      padding: max(8px, env(safe-area-inset-top, 0px)) 8px max(8px, env(safe-area-inset-bottom, 0px));
+    }
+
+    .project-modal-panel {
+      max-height: calc(100dvh - 16px);
+      padding: 18px;
+      border-radius: 16px;
+    }
+
+    .project-modal-panel h2 {
+      font-size: clamp(26px, 8vw, 32px);
+      margin-bottom: 16px;
+      padding-right: 44px;
+    }
+
+    .project-form {
+      gap: 12px;
+    }
+
+    .project-form-row {
+      gap: 6px;
+    }
+
+    .project-form-row label,
+    .project-form-note,
+    .project-form-status {
+      font-size: 12px;
+    }
+
+    .project-form-row input,
+    .project-form-row select,
+    .project-form-row textarea {
+      padding: 11px 12px;
+    }
+
+    .project-form-row textarea {
+      min-height: 96px;
+    }
   }
 
   .about-hero {

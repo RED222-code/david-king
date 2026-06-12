@@ -167,74 +167,46 @@ function initProjectInquiryForm() {
     <div class="project-modal-backdrop" data-project-modal-close></div>
     <div class="project-modal-panel" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
       <button type="button" class="project-modal-close" aria-label="Close project form" data-project-modal-close>&times;</button>
-      <div class="project-modal-layout">
-        <aside class="project-modal-copy">
-          <div class="section-label">Project Inquiry</div>
-          <h2 id="project-modal-title">Start a project</h2>
-          <p class="project-modal-lead">Tell me what you want to build and I’ll come back with a clear next step, a realistic scope, and a delivery plan that fits.</p>
-
-          <div class="project-modal-highlights" aria-label="Project highlights">
-            <div class="project-modal-highlight">
-              <span class="project-modal-highlight-value">2 - 4 weeks</span>
-              <span class="project-modal-highlight-label">Typical launch window</span>
-            </div>
-            <div class="project-modal-highlight">
-              <span class="project-modal-highlight-value">Mobile-first</span>
-              <span class="project-modal-highlight-label">Responsive by default</span>
-            </div>
-            <div class="project-modal-highlight">
-              <span class="project-modal-highlight-value">Fast reply</span>
-              <span class="project-modal-highlight-label">Usually within 24 hours</span>
-            </div>
-          </div>
-
-          <div class="project-modal-note-box">
-            <span class="project-modal-note-title">Best for</span>
-            <p>Web apps, dashboards, websites, ecommerce builds, backend APIs, and redesigns that need a cleaner user experience.</p>
-          </div>
-        </aside>
-
-        <form class="project-form" id="project-inquiry-form">
-          <div class="project-form-row project-form-row-half">
-            <label for="project-name">Name</label>
-            <input id="project-name" name="name" type="text" autocomplete="name" required>
-          </div>
-          <div class="project-form-row project-form-row-half">
-            <label for="project-email">Email</label>
-            <input id="project-email" name="email" type="email" autocomplete="email" required>
-          </div>
-          <div class="project-form-row project-form-row-half">
-            <label for="project-type">Project type</label>
-            <select id="project-type" name="type" required>
-              <option value="">Select one</option>
-              <option>Web app</option>
-              <option>Website</option>
-              <option>Ecommerce</option>
-              <option>Dashboard / SaaS</option>
-              <option>API / backend</option>
-            </select>
-          </div>
-          <div class="project-form-row project-form-row-half">
-            <label for="project-budget">Budget range</label>
-            <select id="project-budget" name="budget" required>
-              <option value="">Select one</option>
-              <option>Under $1,000</option>
-              <option>$1,000 - $3,000</option>
-              <option>$3,000 - $8,000</option>
-              <option>$8,000+</option>
-            </select>
-          </div>
-          <div class="project-form-row project-form-row-full">
-            <label for="project-message">Project details</label>
-            <textarea id="project-message" name="message" rows="5" required></textarea>
-          </div>
-          <div class="project-form-footer project-form-row-full">
-            <p class="project-form-note">Submitting sends the inquiry by email and opens WhatsApp with the details ready to send.</p>
-            <p class="project-form-status" role="status" aria-live="polite"></p>
-            <button type="submit" class="btn btn-primary project-form-submit">Send inquiry</button>
-          </div>
-        </form>
-      </div>
+      <div class="section-label">Project Inquiry</div>
+      <h2 id="project-modal-title">Start a project</h2>
+      <form class="project-form" id="project-inquiry-form">
+        <div class="project-form-row">
+          <label for="project-name">Name</label>
+          <input id="project-name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="project-form-row">
+          <label for="project-email">Email</label>
+          <input id="project-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="project-form-row">
+          <label for="project-type">Project type</label>
+          <select id="project-type" name="type" required>
+            <option value="">Select one</option>
+            <option>Web app</option>
+            <option>Website</option>
+            <option>Ecommerce</option>
+            <option>Dashboard / SaaS</option>
+            <option>API / backend</option>
+          </select>
+        </div>
+        <div class="project-form-row">
+          <label for="project-budget">Budget range</label>
+          <select id="project-budget" name="budget" required>
+            <option value="">Select one</option>
+            <option>Under $1,000</option>
+            <option>$1,000 - $3,000</option>
+            <option>$3,000 - $8,000</option>
+            <option>$8,000+</option>
+          </select>
+        </div>
+        <div class="project-form-row">
+          <label for="project-message">Project details</label>
+          <textarea id="project-message" name="message" rows="5" required></textarea>
+        </div>
+        <p class="project-form-note">Submitting sends the inquiry by email and opens WhatsApp with the details ready to send.</p>
+        <p class="project-form-status" role="status" aria-live="polite"></p>
+        <button type="submit" class="btn btn-primary project-form-submit">Send inquiry</button>
+      </form>
     </div>
   `;
   document.body.appendChild(modal);
@@ -340,6 +312,7 @@ function initProjectsSlideshow() {
 
   let currentIndex = 0;
   let timer = null;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function showSlide(index) {
     slides.forEach((slide, i) => {
@@ -359,13 +332,16 @@ function initProjectsSlideshow() {
   }
 
   function startAutoPlay() {
-    if (slides.length <= 1) return;
+    if (slides.length <= 1 || prefersReducedMotion || document.hidden) return;
     stopAutoPlay();
-    timer = setInterval(nextSlide, 2500);
+    timer = setInterval(nextSlide, 4200);
   }
 
   function stopAutoPlay() {
-    if (timer) clearInterval(timer);
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
   }
 
   dots.forEach(dot => {
@@ -380,6 +356,14 @@ function initProjectsSlideshow() {
   nextBtn?.addEventListener('click', () => { nextSlide(); startAutoPlay(); });
 
   startAutoPlay();
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopAutoPlay();
+    } else {
+      startAutoPlay();
+    }
+  });
 }
 
 // --- Image Fallbacks ----------------------------------------------------------
@@ -562,10 +546,21 @@ function initA11y() {
 // --- Page Transitions & Hash Routing ------------------------------------------
 function initPageTransitions() {
   const body = document.body;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealItems = Array.from(document.querySelectorAll('.reveal-item, .reveal-left, .reveal-right'));
+  revealItems.forEach((item, index) => {
+    item.style.setProperty('--reveal-delay', `${Math.min(index * 30, 180)}ms`);
+  });
 
-  // On page load, remove transitioning class to fade in
+  // On page load, clear the transition state after the first paint.
   requestAnimationFrame(() => {
-    body.classList.remove('page-transitioning');
+    if (prefersReducedMotion) {
+      body.classList.remove('page-transitioning');
+      return;
+    }
+    requestAnimationFrame(() => {
+      body.classList.remove('page-transitioning');
+    });
   });
 
   // Handle internal page routing transitions
@@ -604,11 +599,15 @@ function initPageTransitions() {
 
       // Internal page transition out
       e.preventDefault();
+      if (prefersReducedMotion) {
+        window.location.href = href;
+        return;
+      }
       body.classList.add('page-transitioning');
 
       setTimeout(() => {
         window.location.href = href;
-      }, 350); // Matches the 0.35s CSS transition
+      }, 180);
     }
   });
 
@@ -646,6 +645,33 @@ function initPageTransitions() {
   }
 }
 
+// --- Reveal Items ------------------------------------------------------------
+function initRevealItems() {
+  const items = Array.from(document.querySelectorAll('.reveal-item, .reveal-left, .reveal-right'));
+  if (!items.length) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+    items.forEach((item) => item.classList.add('visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.16,
+    rootMargin: '0px 0px -8% 0px',
+  });
+
+  items.forEach((item, index) => {
+    item.style.setProperty('--reveal-delay', `${Math.min(index * 30, 180)}ms`);
+    observer.observe(item);
+  });
+}
+
 // --- About Page Sticky Nav & Active Highlight ---------------------------------
 function initAboutPageTabs() {
   const tabs = document.querySelector('.about-page-tabs');
@@ -663,6 +689,7 @@ function initAboutPageTabs() {
     .map(id => document.querySelector(id))
     .filter(Boolean);
   const tabLinks = tabs.querySelectorAll('a');
+  let ticking = false;
 
   function handleScroll() {
     const isMobile = window.innerWidth <= 768;
@@ -702,8 +729,17 @@ function initAboutPageTabs() {
     }
   }
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  window.addEventListener('resize', handleScroll, { passive: true });
+  function scheduleHandleScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      handleScroll();
+      ticking = false;
+    });
+  }
+
+  window.addEventListener('scroll', scheduleHandleScroll, { passive: true });
+  window.addEventListener('resize', scheduleHandleScroll, { passive: true });
   handleScroll(); // Run once initially
 }
 
@@ -711,6 +747,7 @@ function initAboutPageTabs() {
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('js-ready');
   initPageTransitions();
+  initRevealItems();
   initSmoothScroll();
 
   initSectionHeaderReveal();
@@ -732,7 +769,6 @@ document.addEventListener('DOMContentLoaded', () => {
       outline-offset: 3px;
     }
   `;
-  document.head.appendChild(style);
+document.head.appendChild(style);
 });
-
 

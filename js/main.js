@@ -167,46 +167,74 @@ function initProjectInquiryForm() {
     <div class="project-modal-backdrop" data-project-modal-close></div>
     <div class="project-modal-panel" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
       <button type="button" class="project-modal-close" aria-label="Close project form" data-project-modal-close>&times;</button>
-      <div class="section-label">Project Inquiry</div>
-      <h2 id="project-modal-title">Start a project</h2>
-      <form class="project-form" id="project-inquiry-form">
-        <div class="project-form-row">
-          <label for="project-name">Name</label>
-          <input id="project-name" name="name" type="text" autocomplete="name" required>
-        </div>
-        <div class="project-form-row">
-          <label for="project-email">Email</label>
-          <input id="project-email" name="email" type="email" autocomplete="email" required>
-        </div>
-        <div class="project-form-row">
-          <label for="project-type">Project type</label>
-          <select id="project-type" name="type" required>
-            <option value="">Select one</option>
-            <option>Web app</option>
-            <option>Website</option>
-            <option>Ecommerce</option>
-            <option>Dashboard / SaaS</option>
-            <option>API / backend</option>
-          </select>
-        </div>
-        <div class="project-form-row">
-          <label for="project-budget">Budget range</label>
-          <select id="project-budget" name="budget" required>
-            <option value="">Select one</option>
-            <option>Under $1,000</option>
-            <option>$1,000 - $3,000</option>
-            <option>$3,000 - $8,000</option>
-            <option>$8,000+</option>
-          </select>
-        </div>
-        <div class="project-form-row">
-          <label for="project-message">Project details</label>
-          <textarea id="project-message" name="message" rows="5" required></textarea>
-        </div>
-        <p class="project-form-note">Submitting sends the inquiry by email and opens WhatsApp with the details ready to send.</p>
-        <p class="project-form-status" role="status" aria-live="polite"></p>
-        <button type="submit" class="btn btn-primary project-form-submit">Send inquiry</button>
-      </form>
+      <div class="project-modal-layout">
+        <aside class="project-modal-copy">
+          <div class="section-label">Project Inquiry</div>
+          <h2 id="project-modal-title">Start a project</h2>
+          <p class="project-modal-lead">Tell me what you want to build and I’ll come back with a clear next step, a realistic scope, and a delivery plan that fits.</p>
+
+          <div class="project-modal-highlights" aria-label="Project highlights">
+            <div class="project-modal-highlight">
+              <span class="project-modal-highlight-value">2 - 4 weeks</span>
+              <span class="project-modal-highlight-label">Typical launch window</span>
+            </div>
+            <div class="project-modal-highlight">
+              <span class="project-modal-highlight-value">Mobile-first</span>
+              <span class="project-modal-highlight-label">Responsive by default</span>
+            </div>
+            <div class="project-modal-highlight">
+              <span class="project-modal-highlight-value">Fast reply</span>
+              <span class="project-modal-highlight-label">Usually within 24 hours</span>
+            </div>
+          </div>
+
+          <div class="project-modal-note-box">
+            <span class="project-modal-note-title">Best for</span>
+            <p>Web apps, dashboards, websites, ecommerce builds, backend APIs, and redesigns that need a cleaner user experience.</p>
+          </div>
+        </aside>
+
+        <form class="project-form" id="project-inquiry-form">
+          <div class="project-form-row project-form-row-half">
+            <label for="project-name">Name</label>
+            <input id="project-name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="project-form-row project-form-row-half">
+            <label for="project-email">Email</label>
+            <input id="project-email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="project-form-row project-form-row-half">
+            <label for="project-type">Project type</label>
+            <select id="project-type" name="type" required>
+              <option value="">Select one</option>
+              <option>Web app</option>
+              <option>Website</option>
+              <option>Ecommerce</option>
+              <option>Dashboard / SaaS</option>
+              <option>API / backend</option>
+            </select>
+          </div>
+          <div class="project-form-row project-form-row-half">
+            <label for="project-budget">Budget range</label>
+            <select id="project-budget" name="budget" required>
+              <option value="">Select one</option>
+              <option>Under $1,000</option>
+              <option>$1,000 - $3,000</option>
+              <option>$3,000 - $8,000</option>
+              <option>$8,000+</option>
+            </select>
+          </div>
+          <div class="project-form-row project-form-row-full">
+            <label for="project-message">Project details</label>
+            <textarea id="project-message" name="message" rows="5" required></textarea>
+          </div>
+          <div class="project-form-footer project-form-row-full">
+            <p class="project-form-note">Submitting sends the inquiry by email and opens WhatsApp with the details ready to send.</p>
+            <p class="project-form-status" role="status" aria-live="polite"></p>
+            <button type="submit" class="btn btn-primary project-form-submit">Send inquiry</button>
+          </div>
+        </form>
+      </div>
     </div>
   `;
   document.body.appendChild(modal);
@@ -356,43 +384,73 @@ function initProjectsSlideshow() {
 
 // --- Image Fallbacks ----------------------------------------------------------
 function initImageFallbacks() {
-  document.querySelectorAll('img').forEach(img => {
-    img.addEventListener('error', function () {
-      this.style.display = 'none';
-      const placeholder = document.createElement('div');
-      placeholder.style.cssText = `
-        width: 100%; height: 100%; min-height: 200px;
-        background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%);
-        border-radius: inherit;
-      `;
-      this.parentElement.appendChild(placeholder);
-    });
-  });
+  document.addEventListener('error', (event) => {
+    const img = event.target;
+    if (!(img instanceof HTMLImageElement)) return;
+    if (!img.parentElement || img.dataset.fallbackHandled === 'true') return;
+
+    img.dataset.fallbackHandled = 'true';
+    img.style.display = 'none';
+
+    const placeholder = document.createElement('div');
+    placeholder.style.cssText = `
+      width: 100%; height: 100%; min-height: 200px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%);
+      border-radius: inherit;
+    `;
+    img.parentElement.appendChild(placeholder);
+  }, true);
 }
 
 // --- Project Filter -----------------------------------------------------------
 function initProjectFilter() {
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const projectCards = document.querySelectorAll('#projects-grid .stack-card');
-  if (!filterBtns.length) return;
+  const filterBar = document.querySelector('.projects-filter-bar');
+  const filterBtns = Array.from(document.querySelectorAll('.projects-filter-bar .filter-btn'));
+  const projectCards = Array.from(document.querySelectorAll('#projects-grid .stack-card'));
+  const emptyState = document.querySelector('.projects-filter-empty');
+  if (!filterBar || !filterBtns.length || !projectCards.length) return;
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const filter = btn.dataset.filter;
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      projectCards.forEach(card => {
-        const category = card.dataset.category;
-        if (filter === 'all' || category === filter) {
-          card.removeAttribute('data-hidden');
-          card.style.display = '';
-        } else {
-          card.setAttribute('data-hidden', 'true');
-          card.style.display = 'none';
-        }
-      });
+  const cardTags = new Map(
+    projectCards.map((card) => {
+      const tags = (card.dataset.tags || card.dataset.category || '')
+        .split(/[\s,]+/)
+        .filter(Boolean);
+      return [card, tags];
+    })
+  );
+
+  function applyFilter(filter) {
+    let visibleCount = 0;
+
+    projectCards.forEach((card) => {
+      const tags = cardTags.get(card) || [];
+      const isVisible = filter === 'all' || tags.includes(filter);
+      if (isVisible) {
+        card.removeAttribute('data-hidden');
+      } else {
+        card.setAttribute('data-hidden', 'true');
+      }
+      if (isVisible) visibleCount += 1;
     });
+
+    filterBtns.forEach((btn) => {
+      const isActive = btn.dataset.filter === filter;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', String(isActive));
+    });
+
+    if (emptyState) {
+      emptyState.hidden = visibleCount !== 0;
+    }
+  }
+
+  filterBar.addEventListener('click', (event) => {
+    const btn = event.target.closest('.filter-btn');
+    if (!btn || !filterBar.contains(btn)) return;
+    applyFilter(btn.dataset.filter || 'all');
   });
+
+  applyFilter(filterBtns.find((btn) => btn.classList.contains('active'))?.dataset.filter || 'all');
 }
 
 // --- Process Stack Deck (mobile) ---------------------------------------------

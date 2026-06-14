@@ -100,10 +100,7 @@ function initSectionHeaderReveal() {
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
+      entry.target.classList.toggle('visible', entry.isIntersecting);
     });
   }, {
     threshold: 0.10,

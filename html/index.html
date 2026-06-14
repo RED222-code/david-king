@@ -22,37 +22,21 @@
     "@type": "Person",
     "name": "David King",
     "jobTitle": "Full-Stack Developer",
-  <meta name="description"
-    content="David King is a full-stack developer who builds React, Node.js and Firebase products that don't just function - they leave a lasting impression.">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="David King - Full-Stack Developer | React &amp; Node.js">
-  <meta property="og:description"
-    content="Full-stack developer building React, Node.js and Firebase products with a focus on design, user experience, and creating software that stands out.">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:url" content="https://YOUR-DOMAIN.com/">
-  <meta property="og:image" content="https://YOUR-DOMAIN.com/images/og-image.png">
-  <meta name="twitter:image" content="https://YOUR-DOMAIN.com/images/og-image.png">
-  <link rel="canonical" href="https://YOUR-DOMAIN.com/">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "David King",
-    "jobTitle": "Full-Stack Developer",
     "url": "https://YOUR-DOMAIN.com",
     "email": "davidking18222@gmail.com",
     "knowsAbout": ["React", "Node.js", "JavaScript", "MongoDB", "Firebase", "Express"]
   }
   </script>
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="../images/portrait.jpg" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="page-transitioning">
+<body class="home-page">
   <header id="navbar" class="navbar">
     <nav class="nav-inner container">
       <a href="index.html" class="nav-logo" id="nav-logo-link">David King</a>
@@ -156,7 +140,17 @@
         <div class="process-header section-heading reveal-item">
           <h2>Process</h2>
         </div>
-        <div class="process-grid">
+
+        <!--
+          Mobile (home page): JS builds a scroll-driven stack inside
+          #process-stack-stage using the card templates below.
+          Desktop: .process-grid renders as a normal 3-column grid.
+        -->
+        <div class="process-scroll-track" id="process-scroll-track">
+          <div class="process-stack-stage" id="process-stack-stage" aria-hidden="true"></div>
+        </div>
+
+        <div class="process-grid" id="process-cards-source">
 
           <!-- Step 1: Plan -->
           <div class="process-card" data-step="01">
@@ -217,16 +211,16 @@
               <h3>Launch</h3>
               <p>Deploying to production, running automated checks, and setting up monitoring for a smooth handover.</p>
               <ul class="process-bullets">
-                <li><span class="bullet-dot"></span> Cloud Infrastructure & Deploy</li>
+                <li><span class="bullet-dot"></span> Cloud Infrastructure &amp; Deploy</li>
                 <li><span class="bullet-dot"></span> Automated Integration Tests</li>
-                <li><span class="bullet-dot"></span> Performance & SEO Audits</li>
+                <li><span class="bullet-dot"></span> Performance &amp; SEO Audits</li>
               </ul>
             </div>
           </div>
 
         </div>
-        <!-- Mobile carousel dots -->
-        <div class="process-carousel-ui" aria-hidden="true">
+        <!-- Mobile progress dots (stack mode) -->
+        <div class="process-carousel-ui" id="process-stack-dots" aria-hidden="true">
           <div class="process-swipe-hint">
             <span class="process-swipe-dot active"></span>
             <span class="process-swipe-dot"></span>
@@ -242,16 +236,24 @@
         <div class="projects-header section-heading reveal-item">
           <h2>Work</h2>
         </div>
-        <div class="projects-slideshow-container reveal-item">
-          <div class="projects-slideshow-track">
-            <a class="project-card project-slide active" href="https://le-santos-dinner.vercel.app/" target="_blank" rel="noopener">
-              <img src="../images/Projects/Le-santos/light.png" alt="Le Santos Diner website preview" loading="lazy">
-              <span class="project-slide-name">le-santos-diner</span>
-            </a>
+        <div class="projects-slideshow-wrap reveal-item">
+          <button type="button" class="slideshow-side-btn slideshow-side-btn--prev" id="projects-prev" aria-label="Previous project">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="projects-slideshow-container">
+            <div class="projects-slideshow-track">
+              <a class="project-card project-slide active" href="https://le-santos-dinner.vercel.app/" target="_blank" rel="noopener">
+                <img src="../images/Projects/Le-santos/light.png" alt="Le Santos Diner website preview" width="1920" height="1080" loading="lazy">
+                <span class="project-slide-name">le-santos-diner</span>
+              </a>
+            </div>
           </div>
+          <button type="button" class="slideshow-side-btn slideshow-side-btn--next" id="projects-next" aria-label="Next project">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
         </div>
         <div class="projects-view-all reveal-item">
-          <a href="projects.html" class="btn btn-outline">View All Projects</a>
+          <a href="projects.html" class="btn btn-secondary magnetic-btn">View All Projects <span aria-hidden="true">&rarr;</span></a>
         </div>
       </div>
     </section>
@@ -265,10 +267,18 @@
               <div class="about-heading section-heading reveal-item">
                 <h2>About</h2>
               </div>
-              <p class="about-body">I’m a full-stack developer with five years of experience building products end to end. My work spans freelance client projects and internal engineering tools, including dashboards, AI-powered integrations, restaurant apps, and client management portals.</p>
-              <p class="about-body">I focus on responsive React frontends, secure Node.js APIs, and structured MongoDB or Firebase backends. Before freelancing, I worked in the Process Control Department at Renaissance Oil and Gas, contributing to internal tools, automated workflows, and software built to strict professional standards.</p>
-              <p class="about-body">Across every project, the goal is the same: deliver software that is clean, maintainable, and fast to use on both mobile and desktop.</p>
-               <a href="about.html" class="btn btn-outline magnetic-btn">Learn More About Me</a>
+              <div class="about-blocks">
+                <div class="about-block reveal-item">
+                  <p class="about-body">I'm a full-stack developer with five years of experience building products end to end. My work spans freelance client projects and internal engineering tools, including dashboards, AI-powered integrations, restaurant apps, and client management portals.</p>
+                </div>
+                <div class="about-block reveal-item">
+                  <p class="about-body">I focus on responsive React frontends, secure Node.js APIs, and structured MongoDB or Firebase backends. Before freelancing, I worked in the Process Control Department at Renaissance Oil and Gas, contributing to internal tools, automated workflows, and software built to strict professional standards.</p>
+                </div>
+                <div class="about-block reveal-item">
+                  <p class="about-body">Across every project, the goal is the same: deliver software that is clean, maintainable, and fast to use on both mobile and desktop.</p>
+                </div>
+              </div>
+              <a href="about.html" class="btn btn-secondary magnetic-btn">Learn More About Me <span aria-hidden="true">&rarr;</span></a>
             </div>
             
           </div>

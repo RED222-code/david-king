@@ -20,12 +20,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body class="projects-page page-transitioning">
+<body class="projects-page">
   <!-- Skip Navigation -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
@@ -33,10 +33,7 @@
 
   <!-- Navigation -->
   <header id="navbar" class="navbar">
-    <div class="nav-available">
-      <span class="available-dot"></span>
-      Available for work
-    </div>
+
     <nav class="nav-inner container">
       <a href="index.html" class="nav-logo" id="nav-logo-link">David King</a>
       <ul class="nav-links" id="nav-links">
@@ -83,18 +80,14 @@
         <div class="hero-glow-spot hero-glow-spot--1"></div>
         <div class="hero-glow-spot hero-glow-spot--2"></div>
       </div>
-      
+
       <div class="container hero-split-container">
         <div class="hero-copy">
           <h1 class="reveal-item">Projects</h1>
           <p class="reveal-item">A selection of web applications and full-stack projects built using modern frontend and backend technologies.</p>
-          <div class="hero-metrics reveal-item">
-            <span class="metric-tag"><span class="metric-dot"></span>Full-Stack</span>
-            <span class="metric-tag"><span class="metric-dot"></span>Interactive UI</span>
-            <span class="metric-tag"><span class="metric-dot"></span>Modern Stack</span>
-          </div>
+
         </div>
-        
+
         <div class="hero-visual reveal-item">
           <!-- Premium Terminal Mockup -->
           <div class="hero-terminal">
@@ -124,34 +117,59 @@
       </div>
     </section>
 
-    <!-- Stacking Project Cards -->
-    <section class="stack-section section-pad">
+    <!-- Project Archive -->
+    <section class="stack-section project-archive section-pad" aria-labelledby="project-archive-title">
       <div class="container">
-        <div class="filter-bar projects-filter-bar" role="toolbar" aria-label="Filter projects">
-          <button type="button" class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
-          <button type="button" class="filter-btn" data-filter="restaurant" aria-pressed="false">Restaurant</button>
-          <button type="button" class="filter-btn" data-filter="web-development" aria-pressed="false">Web Development</button>
+        <div class="archive-toolbar">
+          <div class="archive-header">
+            <h2 id="project-archive-title" class="reveal-item">Archive</h2>
+            <p class="archive-count reveal-item" id="projects-count" aria-live="polite">1 project</p>
+          </div>
+          <div class="filter-bar projects-filter-bar" role="toolbar" aria-label="Filter projects">
+            <button type="button" class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="filter-btn" data-filter="web-development" aria-pressed="false">Web Development</button>
+          </div>
         </div>
 
         <p class="projects-filter-empty" hidden>No projects match this filter yet.</p>
 
         <div class="stack-cards" id="projects-grid">
 
-          <div class="stack-card" data-category="web-development" data-tags="restaurant web-development" style="--project-theme: #241b12; --project-ink: #f5efe5;">
+          <article class="stack-card archive-record reveal-item" data-category="web-development" data-tags="restaurant web-development" style="--project-theme: #241b12; --project-ink: #f5efe5;">
             <a class="stack-card-inner" href="https://le-santos-dinner.vercel.app/" target="_blank" rel="noopener">
               <div class="stack-card-img">
-                <img src="../images/Projects/Le-santos/light.png" alt="Le Santos Diner website preview" loading="lazy">
+                <img src="../images/Projects/Le-santos/light.png" alt="Le Santos Diner website preview" width="1920" height="1080" loading="lazy">
               </div>
-              <div class="stack-card-info">
-                <div class="stack-card-meta">
-                  <span class="project-tag">Web Development</span>
-                  <span class="stack-card-link">View Project &rarr;</span>
+              <div class="stack-card-info archive-panel">
+                <div class="archive-record-index" aria-hidden="true">01</div>
+                <div class="archive-panel-body">
+                  <div class="stack-card-meta">
+                    <span class="project-tag">Web Development</span>
+                    <span class="archive-year">2026</span>
+                  </div>
+                  <div class="archive-panel-head">
+                    <h3>le-santos-diner</h3>
+                    <span class="stack-card-link"><span class="link-label-full">Open live record &rarr;</span><span class="link-label-short">View &rarr;</span></span>
+                  </div>
+                  <p>A restaurant website built with a focus on atmosphere, speed, and mobile experience.</p>
+                  <dl class="archive-facts">
+                    <div>
+                      <dt>Deed</dt>
+                      <dd>Restaurant presence</dd>
+                    </div>
+                    <div>
+                      <dt>Discipline</dt>
+                      <dd>Responsive frontend</dd>
+                    </div>
+                    <div>
+                      <dt>State</dt>
+                      <dd>Live deployment</dd>
+                    </div>
+                  </dl>
                 </div>
-                <h3>le-santos-diner</h3>
-                <p>A restaurant website built with a focus on atmosphere, speed, and mobile experience.</p>
               </div>
             </a>
-          </div>
+          </article>
 
         </div>
       </div>

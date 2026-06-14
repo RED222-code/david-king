@@ -81,21 +81,34 @@ document.addEventListener('click', (e) => {
 
 // --- Section Header Reveal ---------------------------------------------------
 function initSectionHeaderReveal() {
-  const headers = document.querySelectorAll('.section-heading');
+  const headers = Array.from(document.querySelectorAll('.section-heading')).filter((header) => {
+    if (
+      document.body.classList.contains('home-page') &&
+      header.closest('#projects') &&
+      window.matchMedia('(max-width: 768px)').matches
+    ) {
+      return false;
+    }
+    return true;
+  });
   if (!headers.length) return;
 
-  if (!('IntersectionObserver' in window)) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
     headers.forEach((header) => header.classList.add('visible'));
     return;
   }
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
     });
-  }, { threshold: 0.18, rootMargin: '0px 0px -60px 0px' });
+  }, {
+    threshold: 0.10,
+    rootMargin: '0px 0px -10% 0px'
+  });
 
   headers.forEach((header) => observer.observe(header));
 }
@@ -320,6 +333,16 @@ function initProjectsSlideshow() {
       dot.classList.toggle('active', i === index);
     });
     currentIndex = index;
+    updateNavState();
+  }
+
+  function updateNavState() {
+    const single = slides.length <= 1;
+    [prevBtn, nextBtn].forEach((btn) => {
+      if (!btn) return;
+      btn.classList.toggle('is-disabled', single);
+      btn.disabled = single;
+    });
   }
   function nextSlide() {
     showSlide((currentIndex + 1) % slides.length);
@@ -353,12 +376,26 @@ function initProjectsSlideshow() {
   prevBtn?.addEventListener('click', () => { prevSlide(); startAutoPlay(); });
   nextBtn?.addEventListener('click', () => { nextSlide(); startAutoPlay(); });
 
-  startAutoPlay();
+  updateNavState();
+
+  const slideshowWrap = document.querySelector('.projects-slideshow-wrap');
+  if (slideshowWrap && 'IntersectionObserver' in window) {
+    const slideObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !document.hidden) startAutoPlay();
+        else stopAutoPlay();
+      });
+    }, { threshold: 0.15 });
+    slideObserver.observe(slideshowWrap);
+  } else {
+    startAutoPlay();
+  }
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       stopAutoPlay();
-    } else {
+    } else if (slideshowWrap && slideshowWrap.getBoundingClientRect().bottom > 0 &&
+               slideshowWrap.getBoundingClientRect().top < window.innerHeight) {
       startAutoPlay();
     }
   });
@@ -423,6 +460,13 @@ function initProjectFilter() {
 
     if (emptyState) {
       emptyState.hidden = visibleCount !== 0;
+    }
+
+    const countEl = document.getElementById('projects-count');
+    if (countEl) {
+      countEl.textContent = visibleCount === 1
+        ? '1 project'
+        : `${visibleCount} projects`;
     }
   }
 
@@ -587,8 +631,8 @@ function initPageTransitions() {
     if (linkUrl.origin === window.location.origin) {
       // Exclude page-internal hashes
       const isSamePageHash = linkUrl.pathname === window.location.pathname && linkUrl.hash !== '';
-      const isIndexFallbackHash = (currentPath === 'index.html' || currentPath === '') && 
-                                  (linkUrl.pathname.endsWith('index.html') || linkUrl.pathname.endsWith('/')) && 
+      const isIndexFallbackHash = (currentPath === 'index.html' || currentPath === '') &&
+                                  (linkUrl.pathname.endsWith('index.html') || linkUrl.pathname.endsWith('/')) &&
                                   linkUrl.hash !== '';
 
       if (isSamePageHash || isIndexFallbackHash) {
@@ -645,7 +689,18 @@ function initPageTransitions() {
 
 // --- Reveal Items ------------------------------------------------------------
 function initRevealItems() {
-  const items = Array.from(document.querySelectorAll('.reveal-item, .reveal-left, .reveal-right'));
+  const items = Array.from(document.querySelectorAll('.reveal-item, .reveal-left, .reveal-right'))
+    .filter((item) => {
+      if (item.classList.contains('section-heading')) return false;
+      if (
+        document.body.classList.contains('home-page') &&
+        item.closest('#projects') &&
+        window.matchMedia('(max-width: 768px)').matches
+      ) {
+        return false;
+      }
+      return true;
+    });
   if (!items.length) return;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
@@ -653,11 +708,11 @@ function initRevealItems() {
     return;
   }
 
-  const observer = new IntersectionObserver((entries) => {
+  const normalObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
+      normalObserver.unobserve(entry.target);
     });
   }, {
     threshold: 0.16,
@@ -666,9 +721,14 @@ function initRevealItems() {
 
   items.forEach((item, index) => {
     item.style.setProperty('--reveal-delay', `${Math.min(index * 30, 180)}ms`);
-    observer.observe(item);
+    if (item.closest('.hero')) {
+      item.classList.add('visible');
+      return;
+    }
+    normalObserver.observe(item);
   });
 }
+
 
 // --- About Page Sticky Nav & Active Highlight ---------------------------------
 function initAboutPageTabs() {
@@ -679,7 +739,7 @@ function initAboutPageTabs() {
 
   const sectionMap = {
     '#experience': 'Experience',
-    '#what-i-do': 'What I Do',
+    '#what-i-do': 'Capabilities',
     '#beyond-code': 'Beyond Code',
   };
 
@@ -687,36 +747,13 @@ function initAboutPageTabs() {
     .map(id => document.querySelector(id))
     .filter(Boolean);
   const tabLinks = tabs.querySelectorAll('a');
-  let ticking = false;
+  let stickyTicking = false;
 
-  function handleScroll() {
-    const isMobile = window.innerWidth <= 768;
-    // top: 80px on desktop → threshold 81; top: 16px on mobile → threshold 17
-    const stickyThreshold = isMobile ? 17 : 81;
-    const rect = tabs.getBoundingClientRect();
-
-    if (rect.top <= stickyThreshold) {
-      tabs.classList.add('is-sticky');
-    } else {
-      tabs.classList.remove('is-sticky');
-    }
-
-    // Active section detection
-    let activeId = '';
-    const scrollPos = window.scrollY + (isMobile ? 120 : 180);
-
-    sections.forEach(section => {
-      if (scrollPos >= section.offsetTop) {
-        activeId = '#' + section.id;
-      }
+  function setActiveSection(activeId) {
+    tabLinks.forEach((link) => {
+      link.classList.toggle('active', link.getAttribute('href') === activeId);
     });
 
-    tabLinks.forEach(link => {
-      const href = link.getAttribute('href');
-      link.classList.toggle('active', href === activeId);
-    });
-
-    // Update the bento card active-name label
     if (activeName) {
       if (activeId && sectionMap[activeId]) {
         activeName.textContent = sectionMap[activeId];
@@ -727,18 +764,48 @@ function initAboutPageTabs() {
     }
   }
 
-  function scheduleHandleScroll() {
-    if (ticking) return;
-    ticking = true;
+  if (sections.length && 'IntersectionObserver' in window) {
+    const visibleSections = new Set();
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const id = `#${entry.target.id}`;
+        if (entry.isIntersecting) visibleSections.add(id);
+        else visibleSections.delete(id);
+      });
+
+      let activeId = '';
+      sections.forEach((section) => {
+        const id = `#${section.id}`;
+        if (visibleSections.has(id)) activeId = id;
+      });
+      setActiveSection(activeId);
+    }, {
+      rootMargin: '-35% 0px -50% 0px',
+      threshold: 0,
+    });
+
+    sections.forEach((section) => sectionObserver.observe(section));
+  }
+
+  function updateStickyState() {
+    const isMobile = window.innerWidth <= 768;
+    const stickyThreshold = isMobile ? 17 : 81;
+    tabs.classList.toggle('is-sticky', tabs.getBoundingClientRect().top <= stickyThreshold);
+  }
+
+  function scheduleStickyUpdate() {
+    if (stickyTicking) return;
+    stickyTicking = true;
     requestAnimationFrame(() => {
-      handleScroll();
-      ticking = false;
+      updateStickyState();
+      stickyTicking = false;
     });
   }
 
-  window.addEventListener('scroll', scheduleHandleScroll, { passive: true });
-  window.addEventListener('resize', scheduleHandleScroll, { passive: true });
-  handleScroll(); // Run once initially
+  window.addEventListener('scroll', scheduleStickyUpdate, { passive: true });
+  window.addEventListener('resize', scheduleStickyUpdate, { passive: true });
+  updateStickyState();
 }
 
 // --- Init All -----------------------------------------------------------------
@@ -756,7 +823,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initImageFallbacks();
   initA11y();
   initProcessCarousel();
+  initMobileProcessZoom();
   initAboutPageTabs();
+  initMobileStickyHeadings();
+  initAboutBlockMobileFocus();
 
 
   // Keyboard nav focus styles
@@ -770,3 +840,399 @@ document.addEventListener('DOMContentLoaded', () => {
 document.head.appendChild(style);
 });
 
+// --- Scroll-Driven Process Card Stack (home page, mobile) ---------------------
+function initMobileProcessZoom() {
+  if (!document.body.classList.contains('home-page')) return;
+
+  const isMobile = () => window.innerWidth <= 768;
+
+  // ── DOM refs ──────────────────────────────────────────────────────────────
+  const sourceGrid = document.getElementById('process-cards-source');
+  const track      = document.getElementById('process-scroll-track');
+  const stage      = document.getElementById('process-stack-stage');
+  const dotsEl     = document.querySelectorAll('#process-stack-dots .process-swipe-dot');
+  const dotsWrap   = document.getElementById('process-stack-dots');
+  const projectsSection = document.getElementById('projects');
+  const projectsPanel   = projectsSection?.querySelector('.container');
+
+  if (!sourceGrid || !track || !stage) return;
+
+  const sourceCards = Array.from(sourceGrid.querySelectorAll('.process-card'));
+  const total       = sourceCards.length;
+  if (!total) return;
+
+  let stackCards = [];
+  let ticking    = false;
+  let lastActive = -1;
+  let workHandedOff = false;
+  let trackLayout = null;
+
+  function measureTrackLayout() {
+    const vh = window.innerHeight;
+    const sceneH = vh * SCENE_VH;
+    const trackTop = track.getBoundingClientRect().top + window.scrollY;
+    trackLayout = {
+      vh,
+      sceneH,
+      trackTop,
+      trackEnd: trackTop + track.offsetHeight,
+    };
+  }
+
+  // ── Scroll-animation constants ────────────────────────────────────────────
+  // Each card occupies one "scene". A scene fraction of 1.0 = one viewport height.
+  // ENTER + DWELL + RECEDE must equal 1.0
+  const SCENE_VH = 1.5;   // scene height in viewport-height units per card
+  const ENTER    = 0.18;  // fraction: card slides up from below
+  const DWELL    = 0.60;  // fraction: card is fully active (default)
+  const RECEDE   = 0.22;  // fraction: card shrinks behind the next
+
+  // Per-card custom dwell times (overrides default DWELL)
+  const CARD_DWELL = [
+    0.85,  // Card 1 (Plan): stays longer
+    0.85,  // Card 2 (Build): stays longer
+    0.85   // Card 3 (Launch): stays longer
+  ];
+  const WORK_DWELL = 0.85;
+  const cardSceneTotal = CARD_DWELL.slice(0, total).reduce((sum, dwell) => sum + dwell, 0);
+  const workSceneStart = cardSceneTotal;
+  const totalScenes = cardSceneTotal + WORK_DWELL;
+
+  // Bouncy ease-out (approximated spring)
+  function bounceOut(t) {
+    const b1 = 4/11, b2 = 6/11, b3 = 8/11, b4 = 3/4,
+          b5 = 9/11, b6 = 10/11, b7 = 15/16,
+          b8 = 21/22, b9 = 63/64, bx = 1 / b1 / b1;
+    if (t < b1) return bx * t * t;
+    if (t < b3) return bx * (t -= b2) * t + b4;
+    if (t < b6) return bx * (t -= b5) * t + b7;
+    return bx * (t -= b8) * t + b9;
+  }
+  function easeOut3(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function applySceneMotion(p, dwell, onActive) {
+    let scale = 1;
+    let ty = 0;
+    let opacity = 1;
+    let active = false;
+
+    if (p > ENTER) {
+      scale = 0.86;
+      ty = 72;
+      opacity = 0;
+    } else if (p > 0) {
+      const t = 1 - (p / ENTER);
+      const eased = bounceOut(t);
+      scale = 0.86 + eased * 0.14;
+      ty = 72 * (1 - eased);
+      opacity = Math.min(1, t * 4);
+    } else if (p >= -dwell) {
+      scale = 1;
+      ty = 0;
+      opacity = 1;
+      active = true;
+    } else if (p >= -(dwell + RECEDE)) {
+      const t = (-p - dwell) / RECEDE;
+      const eased = easeOut3(t);
+      scale = 1 - eased * 0.12;
+      ty = eased * 28;
+      opacity = 1 - eased * 0.58;
+    } else {
+      const depth = Math.floor(-p - dwell - RECEDE);
+      scale = Math.max(0.78, 0.88 - depth * 0.05);
+      ty = 28 + depth * 18;
+      opacity = Math.max(0.12, 0.42 - depth * 0.15);
+    }
+
+    if (onActive) onActive(active);
+    return { scale, ty, opacity };
+  }
+
+  function markProjectsVisible() {
+    projectsSection?.querySelectorAll('.reveal-item, .section-heading').forEach((el) => {
+      el.classList.add('visible');
+    });
+  }
+
+  function resetProjectsScrollState() {
+    if (!projectsSection || !projectsPanel) return;
+    projectsSection.classList.remove('projects--scroll-handoff', 'projects--scroll-pending', 'projects--scroll-active', 'projects--scroll-complete');
+    projectsSection.style.marginTop = '';
+    projectsPanel.style.transform = '';
+    projectsPanel.style.opacity = '';
+    projectsPanel.style.filter = '';
+    projectsPanel.style.pointerEvents = '';
+    if (dotsWrap) dotsWrap.style.opacity = '';
+  }
+
+  // ── Build cloned cards into the stage ────────────────────────────────────
+  function buildStack() {
+    stage.innerHTML = '';
+    stackCards = sourceCards.map((src, i) => {
+      const card = src.cloneNode(true);
+      card.className = 'process-stack-card';
+      // Forward data-step so CSS step-colour variables apply
+      card.setAttribute('data-step', src.dataset.step || String(i + 1).padStart(2, '0'));
+      card.setAttribute('data-psc-index', i);
+      stage.appendChild(card);
+      return card;
+    });
+  }
+
+
+  // ── Main render — drives every card's transform from scroll position ──────
+  function render() {
+    if (!isMobile()) {
+      track.style.display      = 'none';
+      sourceGrid.style.display = '';
+      stackCards.forEach(c => { c.style.cssText = ''; c.classList.remove('psc-active'); });
+      resetProjectsScrollState();
+      workHandedOff = false;
+      trackLayout = null;
+      return;
+    }
+
+    if (!trackLayout) measureTrackLayout();
+    const { vh, sceneH, trackTop, trackEnd } = trackLayout;
+
+    // scrolled = px scrolled into the track (accounting for sticky navbar offset)
+    const scrolled = Math.max(0, window.scrollY - trackTop + 60);
+    const raw = scrolled / sceneH;
+
+    // Calculate cumulative scene positions for each card
+    let cumulativeProgress = 0;
+    const cardPositions = CARD_DWELL.slice(0, total).map((dwell) => {
+      const pos = cumulativeProgress;
+      cumulativeProgress += dwell;
+      return pos;
+    });
+
+    if (workHandedOff || window.scrollY >= trackEnd - vh * 0.2) {
+      if (!workHandedOff) {
+        workHandedOff = true;
+        resetProjectsScrollState();
+        projectsSection?.classList.add('projects--scroll-complete');
+        markProjectsVisible();
+      }
+    } else if (projectsSection && projectsPanel) {
+      projectsSection.classList.add('projects--scroll-handoff');
+      projectsSection.classList.toggle('projects--scroll-pending', raw < workSceneStart - ENTER);
+      projectsSection.classList.toggle('projects--scroll-active', raw >= workSceneStart - ENTER);
+
+      const workP = workSceneStart - raw;
+      const workMotion = applySceneMotion(workP, WORK_DWELL);
+      projectsPanel.style.transform = `translateY(${workMotion.ty.toFixed(1)}px) scale(${workMotion.scale.toFixed(4)})`;
+      projectsPanel.style.opacity = workMotion.opacity.toFixed(4);
+      projectsPanel.style.pointerEvents = workMotion.opacity > 0.65 ? '' : 'none';
+
+      if (workMotion.opacity > 0.9 && workP <= 0 && workP >= -WORK_DWELL) {
+        markProjectsVisible();
+      }
+    }
+
+    // Update progress dots (hide once Work scene begins)
+    if (dotsWrap) {
+      const dotsFade = raw < workSceneStart - ENTER
+        ? 1
+        : Math.max(0, 1 - (raw - (workSceneStart - ENTER)) / 0.12);
+      dotsWrap.style.opacity = String(dotsFade);
+      dotsWrap.style.pointerEvents = dotsFade > 0.1 ? '' : 'none';
+    }
+
+    let activeIdx = 0;
+    for (let i = 0; i < total; i++) {
+      if (raw >= cardPositions[i]) activeIdx = i;
+    }
+    if (activeIdx !== lastActive) {
+      lastActive = activeIdx;
+      dotsEl.forEach((d, i) => d.classList.toggle('active', i === activeIdx));
+    }
+
+    stackCards.forEach((card, i) => {
+      const cardDwell = CARD_DWELL[i] || DWELL;
+      const cardStart = cardPositions[i];
+      const p = cardStart - raw;
+      let zIndex = i + 1;
+
+      const motion = applySceneMotion(p, cardDwell, (active) => {
+        card.classList.toggle('psc-active', active);
+      });
+
+      if (p > ENTER) {
+        zIndex = i + 1;
+      } else if (p > 0) {
+        zIndex = total + 5;
+      } else if (p >= -(cardDwell + RECEDE)) {
+        zIndex = total + 10;
+      } else {
+        const depth = Math.floor(-p - cardDwell - RECEDE);
+        zIndex = Math.max(1, total - depth);
+      }
+
+      if (raw >= workSceneStart - ENTER * 0.5) {
+        const handoff = Math.min(1, (raw - (workSceneStart - ENTER * 0.5)) / 0.2);
+        motion.opacity *= 1 - handoff * 0.92;
+        motion.ty += handoff * 36;
+        motion.scale *= 1 - handoff * 0.08;
+        card.classList.remove('psc-active');
+      }
+
+      card.style.transform = `translateY(${motion.ty.toFixed(1)}px) scale(${motion.scale.toFixed(4)})`;
+      card.style.opacity   = motion.opacity.toFixed(4);
+      card.style.zIndex    = String(zIndex);
+    });
+  }
+
+  // ── Setup / teardown ─────────────────────────────────────────────────────
+  function setup() {
+    if (!isMobile()) {
+      track.style.display      = 'none';
+      sourceGrid.style.display = '';
+      resetProjectsScrollState();
+      workHandedOff = false;
+      return;
+    }
+
+    track.style.display      = 'block';
+    sourceGrid.style.display = 'none';
+    workHandedOff = false;
+
+    if (!stackCards.length) buildStack();
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      track.style.height = '';
+      resetProjectsScrollState();
+      markProjectsVisible();
+      stackCards.forEach((card) => {
+        card.style.cssText = '';
+        card.classList.add('psc-active');
+      });
+      return;
+    }
+
+    const vh     = window.innerHeight;
+    const sceneH = vh * SCENE_VH;
+    track.style.height = (sceneH * totalScenes).toFixed(0) + 'px';
+
+    if (projectsSection) {
+      projectsSection.style.marginTop = `${-(vh - 60)}px`;
+      projectsSection.classList.remove('projects--scroll-complete');
+    }
+
+    trackLayout = null;
+    measureTrackLayout();
+    render();
+  }
+
+  function scheduleRender() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(() => { render(); ticking = false; });
+  }
+
+  setup();
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { stackCards = []; trackLayout = null; setup(); }, 200);
+  }, { passive: true });
+
+  window.addEventListener('scroll', scheduleRender, { passive: true });
+}
+
+// --- Mobile Sticky Section Headings -------------------------------------------
+function initMobileStickyHeadings() {
+  const isMobile = () => window.innerWidth <= 768;
+  const headings = document.querySelectorAll('.section-heading');
+  if (!headings.length) return;
+
+  if (!('IntersectionObserver' in window)) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!isMobile()) {
+        entry.target.classList.remove('is-stuck');
+        return;
+      }
+      // Stuck if top is at absolute top (0px) and it crosses the threshold
+      const isStuck = entry.intersectionRatio < 1 && entry.boundingClientRect.top <= 1;
+      entry.target.classList.toggle('is-stuck', isStuck);
+    });
+  }, {
+    threshold: [1],
+    rootMargin: '0px 0px 0px 0px' // aligns with the absolute top edge of viewport
+  });
+
+  headings.forEach((heading) => observer.observe(heading));
+
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      headings.forEach((heading) => heading.classList.remove('is-stuck'));
+    }
+  }, { passive: true });
+}
+
+// --- About section blocks: mobile center focus --------------------------------
+function initAboutBlockMobileFocus() {
+  const blocks = [
+    ...document.querySelectorAll('#about-me .about-block'),
+    ...document.querySelectorAll(
+      '.about-page .experience-item, .about-page .what-card, .about-page .about-hero-panel, .about-page .beyond-card'
+    ),
+  ];
+  if (!blocks.length) return;
+
+  const isMobile = () => window.innerWidth <= 768;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let observer = null;
+  let resizeTimer = null;
+
+  function triggerBounce(block) {
+    if (prefersReducedMotion || block.dataset.bounced === 'true') return;
+    block.dataset.bounced = 'true';
+    block.classList.add('is-bouncing');
+    block.addEventListener('animationend', () => {
+      block.classList.remove('is-bouncing');
+    }, { once: true });
+  }
+
+  function handleIntersect(entries) {
+    entries.forEach((entry) => {
+      const block = entry.target;
+      if (entry.isIntersecting) {
+        block.classList.add('is-viewport-active');
+        triggerBounce(block);
+      } else {
+        block.classList.remove('is-viewport-active', 'is-bouncing');
+      }
+    });
+  }
+
+  function setup() {
+    if (observer) {
+      blocks.forEach((block) => observer.unobserve(block));
+    }
+
+    blocks.forEach((block) => {
+      block.classList.remove('is-viewport-active', 'is-bouncing');
+    });
+
+    if (!isMobile() || !('IntersectionObserver' in window)) return;
+
+    observer = new IntersectionObserver(handleIntersect, {
+      root: null,
+      rootMargin: '-44% 0px -44% 0px',
+      threshold: 0,
+    });
+
+    blocks.forEach((block) => observer.observe(block));
+  }
+
+  setup();
+
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(setup, 150);
+  }, { passive: true });
+}

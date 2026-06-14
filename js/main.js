@@ -548,7 +548,7 @@ function initProcessCarousel() {
   }, { passive: true });
   grid.addEventListener('touchend', e => {
     if (!isMobile()) return;
-    if (touchStartX - e.changedTouches[0].clientX > 40) dismissTop();
+    if (touchStartX - e.changedTouches[0].clientX > 20) dismissTop();
   }, { passive: true });
 
   function init() {
@@ -689,10 +689,12 @@ function initRevealItems() {
   const items = Array.from(document.querySelectorAll('.reveal-item, .reveal-left, .reveal-right'))
     .filter((item) => {
       if (item.classList.contains('section-heading')) return false;
+      // On mobile home page, exclude projects section content and other sections' reveal-items from scroll observer
+      // But allow section-headings to work normally (they have their own observer)
       if (
         document.body.classList.contains('home-page') &&
-        item.closest('#projects') &&
-        window.matchMedia('(max-width: 768px)').matches
+        window.matchMedia('(max-width: 768px)').matches &&
+        (item.closest('#projects') || item.closest('#about-me') || item.closest('#faq') || item.closest('#contact'))
       ) {
         return false;
       }
@@ -879,18 +881,18 @@ function initMobileProcessZoom() {
   // ── Scroll-animation constants ────────────────────────────────────────────
   // Each card occupies one "scene". A scene fraction of 1.0 = one viewport height.
   // ENTER + DWELL + RECEDE must equal 1.0
-  const SCENE_VH = 1.5;   // scene height in viewport-height units per card
+  const SCENE_VH = 1.1;   // scene height in viewport-height units per card (reduced for tighter pacing)
   const ENTER    = 0.18;  // fraction: card slides up from below
   const DWELL    = 0.60;  // fraction: card is fully active (default)
   const RECEDE   = 0.22;  // fraction: card shrinks behind the next
 
   // Per-card custom dwell times (overrides default DWELL)
   const CARD_DWELL = [
-    0.85,  // Card 1 (Plan): stays longer
-    0.85,  // Card 2 (Build): stays longer
-    0.85   // Card 3 (Launch): stays longer
+    0.70,  // Card 1 (Plan): stays longer but not too long
+    0.70,  // Card 2 (Build): stays longer but not too long
+    0.70   // Card 3 (Launch): stays longer but not too long
   ];
-  const WORK_DWELL = 0.85;
+  const WORK_DWELL = 0.70;
   const cardSceneTotal = CARD_DWELL.slice(0, total).reduce((sum, dwell) => sum + dwell, 0);
   const workSceneStart = cardSceneTotal;
   const totalScenes = cardSceneTotal + WORK_DWELL;
@@ -946,7 +948,7 @@ function initMobileProcessZoom() {
   }
 
   function markProjectsVisible() {
-    projectsSection?.querySelectorAll('.reveal-item, .section-heading').forEach((el) => {
+    projectsSection?.querySelectorAll('.reveal-item:not(.section-heading)').forEach((el) => {
       el.classList.add('visible');
     });
   }
@@ -960,6 +962,16 @@ function initMobileProcessZoom() {
     projectsPanel.style.filter = '';
     projectsPanel.style.pointerEvents = '';
     if (dotsWrap) dotsWrap.style.opacity = '';
+    
+    // Only ensure reveal-items (not section-headings) are visible for sections after projects
+    const sectionsAfterProjects = document.querySelectorAll('#about-me, #faq, #contact');
+    sectionsAfterProjects.forEach(section => {
+      section.querySelectorAll('.reveal-item:not(.section-heading)').forEach(el => {
+        if (!el.classList.contains('visible')) {
+          el.classList.add('visible');
+        }
+      });
+    });
   }
 
   // ── Build cloned cards into the stage ────────────────────────────────────
@@ -1010,6 +1022,14 @@ function initMobileProcessZoom() {
         resetProjectsScrollState();
         projectsSection?.classList.add('projects--scroll-complete');
         markProjectsVisible();
+        
+        // Ensure only reveal-items (not section-headings) are visible for sections after projects
+        const sectionsAfterProjects = document.querySelectorAll('#about-me, #faq, #contact');
+        sectionsAfterProjects.forEach(section => {
+          section.querySelectorAll('.reveal-item:not(.section-heading)').forEach(el => {
+            el.classList.add('visible');
+          });
+        });
       }
     } else if (projectsSection && projectsPanel) {
       projectsSection.classList.add('projects--scroll-handoff');

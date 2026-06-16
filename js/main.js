@@ -81,16 +81,7 @@ document.addEventListener('click', (e) => {
 
 // --- Section Header Reveal ---------------------------------------------------
 function initSectionHeaderReveal() {
-  const headers = Array.from(document.querySelectorAll('.section-heading')).filter((header) => {
-    if (
-      document.body.classList.contains('home-page') &&
-      header.closest('#projects') &&
-      window.matchMedia('(max-width: 768px)').matches
-    ) {
-      return false;
-    }
-    return true;
-  });
+  const headers = Array.from(document.querySelectorAll('.section-heading'));
   if (!headers.length) return;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
@@ -689,15 +680,6 @@ function initRevealItems() {
   const items = Array.from(document.querySelectorAll('.reveal-item, .reveal-left, .reveal-right'))
     .filter((item) => {
       if (item.classList.contains('section-heading')) return false;
-      // On mobile home page, exclude projects section content and other sections' reveal-items from scroll observer
-      // But allow section-headings to work normally (they have their own observer)
-      if (
-        document.body.classList.contains('home-page') &&
-        window.matchMedia('(max-width: 768px)').matches &&
-        (item.closest('#projects') || item.closest('#about-me') || item.closest('#faq') || item.closest('#contact'))
-      ) {
-        return false;
-      }
       return true;
     });
   if (!items.length) return;
@@ -851,8 +833,6 @@ function initMobileProcessZoom() {
   const stage      = document.getElementById('process-stack-stage');
   const dotsEl     = document.querySelectorAll('#process-stack-dots .process-swipe-dot');
   const dotsWrap   = document.getElementById('process-stack-dots');
-  const projectsSection = document.getElementById('projects');
-  const projectsPanel   = projectsSection?.querySelector('.container');
 
   if (!sourceGrid || !track || !stage) return;
 
@@ -863,7 +843,6 @@ function initMobileProcessZoom() {
   let stackCards = [];
   let ticking    = false;
   let lastActive = -1;
-  let workHandedOff = false;
   let trackLayout = null;
 
   function measureTrackLayout() {
@@ -881,21 +860,23 @@ function initMobileProcessZoom() {
   // ── Scroll-animation constants ────────────────────────────────────────────
   // Each card occupies one "scene". A scene fraction of 1.0 = one viewport height.
   // ENTER + DWELL + RECEDE must equal 1.0
-  const SCENE_VH = 1.1;   // scene height in viewport-height units per card (reduced for tighter pacing)
+  const SCENE_VH = 0.85;  // scene height in viewport-height units per card (reduced for faster transitions)
   const ENTER    = 0.18;  // fraction: card slides up from below
   const DWELL    = 0.60;  // fraction: card is fully active (default)
   const RECEDE   = 0.22;  // fraction: card shrinks behind the next
+  const HEADER_OFFSET_VH = 0.6; // Extra viewport height for header visibility before cards start
 
   // Per-card custom dwell times (overrides default DWELL)
+  // 1.0 dwell ≈ 1 mobile swipe to advance
   const CARD_DWELL = [
-    0.70,  // Card 1 (Plan): stays longer but not too long
-    0.70,  // Card 2 (Build): stays longer but not too long
-    0.70   // Card 3 (Launch): stays longer but not too long
+    1.0,  // Card 1 (Plan): 1 swipe to advance
+    1.0,  // Card 2 (Build): 1 swipe to advance
+    1.2   // Card 3 (Launch): slightly more than 1 swipe (stays visible longer)
   ];
-  const WORK_DWELL = 0.70;
+
   const cardSceneTotal = CARD_DWELL.slice(0, total).reduce((sum, dwell) => sum + dwell, 0);
-  const workSceneStart = cardSceneTotal;
-  const totalScenes = cardSceneTotal + WORK_DWELL;
+  // Only include header offset - no end buffer for tight spacing
+  const totalScenes = cardSceneTotal + HEADER_OFFSET_VH;
 
   // Bouncy ease-out (approximated spring)
   function bounceOut(t) {
@@ -947,33 +928,6 @@ function initMobileProcessZoom() {
     return { scale, ty, opacity };
   }
 
-  function markProjectsVisible() {
-    projectsSection?.querySelectorAll('.reveal-item:not(.section-heading)').forEach((el) => {
-      el.classList.add('visible');
-    });
-  }
-
-  function resetProjectsScrollState() {
-    if (!projectsSection || !projectsPanel) return;
-    projectsSection.classList.remove('projects--scroll-handoff', 'projects--scroll-pending', 'projects--scroll-active', 'projects--scroll-complete');
-    projectsSection.style.marginTop = '';
-    projectsPanel.style.transform = '';
-    projectsPanel.style.opacity = '';
-    projectsPanel.style.filter = '';
-    projectsPanel.style.pointerEvents = '';
-    if (dotsWrap) dotsWrap.style.opacity = '';
-    
-    // Only ensure reveal-items (not section-headings) are visible for sections after projects
-    const sectionsAfterProjects = document.querySelectorAll('#about-me, #faq, #contact');
-    sectionsAfterProjects.forEach(section => {
-      section.querySelectorAll('.reveal-item:not(.section-heading)').forEach(el => {
-        if (!el.classList.contains('visible')) {
-          el.classList.add('visible');
-        }
-      });
-    });
-  }
-
   // ── Build cloned cards into the stage ────────────────────────────────────
   function buildStack() {
     stage.innerHTML = '';
@@ -988,25 +942,23 @@ function initMobileProcessZoom() {
     });
   }
 
-
   // ── Main render — drives every card's transform from scroll position ──────
   function render() {
     if (!isMobile()) {
       track.style.display      = 'none';
       sourceGrid.style.display = '';
       stackCards.forEach(c => { c.style.cssText = ''; c.classList.remove('psc-active'); });
-      resetProjectsScrollState();
-      workHandedOff = false;
       trackLayout = null;
       return;
     }
 
     if (!trackLayout) measureTrackLayout();
-    const { vh, sceneH, trackTop, trackEnd } = trackLayout;
+    const { vh, sceneH, trackTop } = trackLayout;
 
-    // scrolled = px scrolled into the track (accounting for sticky navbar offset)
-    const scrolled = Math.max(0, window.scrollY - trackTop + 60);
-    const raw = scrolled / sceneH;
+    // scrolled = px scrolled into the track
+    // Offset to account for header space before cards start
+    const scrolled = Math.max(0, window.scrollY - trackTop);
+    const raw = (scrolled / sceneH) - HEADER_OFFSET_VH;
 
     // Calculate cumulative scene positions for each card
     let cumulativeProgress = 0;
@@ -1015,46 +967,6 @@ function initMobileProcessZoom() {
       cumulativeProgress += dwell;
       return pos;
     });
-
-    if (workHandedOff || window.scrollY >= trackEnd - vh * 0.2) {
-      if (!workHandedOff) {
-        workHandedOff = true;
-        resetProjectsScrollState();
-        projectsSection?.classList.add('projects--scroll-complete');
-        markProjectsVisible();
-        
-        // Ensure only reveal-items (not section-headings) are visible for sections after projects
-        const sectionsAfterProjects = document.querySelectorAll('#about-me, #faq, #contact');
-        sectionsAfterProjects.forEach(section => {
-          section.querySelectorAll('.reveal-item:not(.section-heading)').forEach(el => {
-            el.classList.add('visible');
-          });
-        });
-      }
-    } else if (projectsSection && projectsPanel) {
-      projectsSection.classList.add('projects--scroll-handoff');
-      projectsSection.classList.toggle('projects--scroll-pending', raw < workSceneStart - ENTER);
-      projectsSection.classList.toggle('projects--scroll-active', raw >= workSceneStart - ENTER);
-
-      const workP = workSceneStart - raw;
-      const workMotion = applySceneMotion(workP, WORK_DWELL);
-      projectsPanel.style.transform = `translateY(${workMotion.ty.toFixed(1)}px) scale(${workMotion.scale.toFixed(4)})`;
-      projectsPanel.style.opacity = workMotion.opacity.toFixed(4);
-      projectsPanel.style.pointerEvents = workMotion.opacity > 0.65 ? '' : 'none';
-
-      if (workMotion.opacity > 0.9 && workP <= 0 && workP >= -WORK_DWELL) {
-        markProjectsVisible();
-      }
-    }
-
-    // Update progress dots (hide once Work scene begins)
-    if (dotsWrap) {
-      const dotsFade = raw < workSceneStart - ENTER
-        ? 1
-        : Math.max(0, 1 - (raw - (workSceneStart - ENTER)) / 0.12);
-      dotsWrap.style.opacity = String(dotsFade);
-      dotsWrap.style.pointerEvents = dotsFade > 0.1 ? '' : 'none';
-    }
 
     let activeIdx = 0;
     for (let i = 0; i < total; i++) {
@@ -1086,14 +998,6 @@ function initMobileProcessZoom() {
         zIndex = Math.max(1, total - depth);
       }
 
-      if (raw >= workSceneStart - ENTER * 0.5) {
-        const handoff = Math.min(1, (raw - (workSceneStart - ENTER * 0.5)) / 0.2);
-        motion.opacity *= 1 - handoff * 0.92;
-        motion.ty += handoff * 36;
-        motion.scale *= 1 - handoff * 0.08;
-        card.classList.remove('psc-active');
-      }
-
       card.style.transform = `translateY(${motion.ty.toFixed(1)}px) scale(${motion.scale.toFixed(4)})`;
       card.style.opacity   = motion.opacity.toFixed(4);
       card.style.zIndex    = String(zIndex);
@@ -1105,21 +1009,16 @@ function initMobileProcessZoom() {
     if (!isMobile()) {
       track.style.display      = 'none';
       sourceGrid.style.display = '';
-      resetProjectsScrollState();
-      workHandedOff = false;
       return;
     }
 
     track.style.display      = 'block';
     sourceGrid.style.display = 'none';
-    workHandedOff = false;
 
     if (!stackCards.length) buildStack();
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       track.style.height = '';
-      resetProjectsScrollState();
-      markProjectsVisible();
       stackCards.forEach((card) => {
         card.style.cssText = '';
         card.classList.add('psc-active');
@@ -1130,11 +1029,6 @@ function initMobileProcessZoom() {
     const vh     = window.innerHeight;
     const sceneH = vh * SCENE_VH;
     track.style.height = (sceneH * totalScenes).toFixed(0) + 'px';
-
-    if (projectsSection) {
-      projectsSection.style.marginTop = `${-(vh - 60)}px`;
-      projectsSection.classList.remove('projects--scroll-complete');
-    }
 
     trackLayout = null;
     measureTrackLayout();

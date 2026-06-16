@@ -967,20 +967,25 @@ a.nav-link.btn {
     /* Height is set dynamically by JS; this is a safe fallback */
     height: 450vh;
     margin-bottom: 0;
+    /* Add top padding to ensure header is visible before cards appear */
+    padding-top: 60vh;
   }
 
-  /* Sticky stage: fills the viewport below the navbar */
+  /* Sticky stage: centered vertically in viewport */
   .home-page .process-stack-stage {
     display: flex;
     align-items: center;
     justify-content: center;
     position: sticky;
-    top: 60px;
-    height: calc(100vh - 60px);
+    top: 50%;
+    transform: translateY(-50%);
+    height: auto;
+    min-height: 400px;
     width: 100%;
     pointer-events: none;
     /* Clip cards that overshoot on bounce */
-    overflow: hidden;
+    overflow: visible;
+    padding: var(--sp-xl) 0;
   }
 
   /* ── Step-specific accent colours ── */
@@ -1063,63 +1068,18 @@ a.nav-link.btn {
     color: var(--color-fg-muted);
   }
 
-  /* ── Progress dots — centred below the sticky stage ── */
+  /* ── Progress dots — centred below the cards ── */
   .home-page .process-carousel-ui {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Overlay at the very bottom of the sticky stage, not in document flow */
-    position: sticky;
-    bottom: 24px;
+    position: fixed;
+    bottom: 20%;
+    left: 0;
+    right: 0;
     z-index: 20;
-    margin-top: -40px; /* pull up so it sits inside the stage area */
-    margin-bottom: var(--sp-lg);
     pointer-events: none;
     transition: opacity 180ms var(--ease-out);
-  }
-
-  /* Tighten process → work handoff and remove dead scroll gap */
-  .home-page .process.section-pad {
-    padding-bottom: 0;
-  }
-
-  .home-page .projects.projects--scroll-handoff {
-    position: sticky;
-    top: 60px;
-    z-index: 6;
-    display: flex;
-    align-items: center;
-    min-height: calc(100vh - 60px);
-    padding-top: 0;
-    padding-bottom: var(--sp-3xl);
-    margin-bottom: calc(-1 * (100vh - 60px));
-  }
-
-  .home-page .projects.projects--scroll-handoff .container {
-    width: 100%;
-    will-change: transform, opacity;
-  }
-
-  .home-page .projects.projects--scroll-active .reveal-item,
-  .home-page .projects.projects--scroll-active .section-heading {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .home-page .projects.projects--scroll-pending .container {
-    pointer-events: none;
-  }
-
-  .home-page .projects.projects--scroll-complete {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    min-height: 0;
-  }
-
-  .home-page .projects.projects--scroll-complete .container {
-    transform: none !important;
-    opacity: 1 !important;
   }
 
 
@@ -1256,7 +1216,7 @@ a.nav-link.btn {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: var(--sp-2xl);
+  margin-bottom: var(--sp-3xl);
   gap: var(--sp-md);
 }
 .projects-header h2 { font-size: clamp(32px, 4vw, 52px); }
